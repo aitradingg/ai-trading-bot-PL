@@ -10,13 +10,13 @@ st.write("វេបសាយវិភាគតម្លៃមាសស្វ័�
 
 if st.button("ចុចទីនេះដើម្បីវិភាគទីផ្សារពេលនេះ"):
     with st.spinner('កំពុងទាញយកទិន្នន័យ និងវិភាគ...'):
-        # កំណត់យកកាលបរិច្ឆេទថ្ងៃនេះដោយស្វ័យប្រវត្តិ
-today = datetime.date.today().strftime('%Y-%m-%d')
-
-# ទាញយកទិន្នន័យចាប់ពីឆ្នាំ ២០២២ រហូតដល់ថ្ងៃបច្ចុប្បន្ន
-df = yf.download(ticker, start='2022-01-01', end=today, progress=False)
-        df = yf.download(ticker, start='2022-01-01', end='2026-01-01', progress=False)
+        ticker = 'GC=F'
+        today = datetime.date.today().strftime('%Y-%m-%d')
+        df = yf.download(ticker, start='2022-01-01', end=today, progress=False)
         df = df[['Open', 'High', 'Low', 'Close', 'Volume']]
+        df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
+តែង
+
         df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
         
         df['MA_5'] = df['Close'].rolling(window=5).mean()
