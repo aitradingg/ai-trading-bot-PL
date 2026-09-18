@@ -1,15 +1,20 @@
-import streamlit as st
-import yfinance as yf
+import datetime
 import pandas as pd
 import numpy as np
+import yfinance as yf
 from sklearn.ensemble import RandomForestClassifier
+import streamlit as st
 
 st.title("🤖 AI Trading Signal Generator (XAUUSD)")
 st.write("វេបសាយវិភាគតម្លៃមាសស្វ័យប្រវត្តិដោយប្រើប្រាស់ AI!")
 
 if st.button("ចុចទីនេះដើម្បីវិភាគទីផ្សារពេលនេះ"):
     with st.spinner('កំពុងទាញយកទិន្នន័យ និងវិភាគ...'):
-        ticker = 'GC=F'
+        # កំណត់យកកាលបរិច្ឆេទថ្ងៃនេះដោយស្វ័យប្រវត្តិ
+today = datetime.date.today().strftime('%Y-%m-%d')
+
+# ទាញយកទិន្នន័យចាប់ពីឆ្នាំ ២០២២ រហូតដល់ថ្ងៃបច្ចុប្បន្ន
+df = yf.download(ticker, start='2022-01-01', end=today, progress=False)
         df = yf.download(ticker, start='2022-01-01', end='2026-01-01', progress=False)
         df = df[['Open', 'High', 'Low', 'Close', 'Volume']]
         df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
