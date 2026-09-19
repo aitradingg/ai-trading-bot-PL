@@ -1,10 +1,3 @@
-if st.button("ចុចទីនេះដើម្បីវិភាគទីផ្សារពេលនេះ"):
-    with st.spinner('កំពុងទាញយកទិន្នន័យ និងវិភាគ...'):
-        ticker = 'GC=F'
-        today = datetime.date.today().strftime('%Y-%m-%d')
-        df = yf.download(ticker, start='2022-01-01', end=today, progress=False)
-        df = df[['Open', 'High', 'Low', 'Close', 'Volume']]
-        df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
 import datetime
 import pandas as pd
 import numpy as np
@@ -83,5 +76,5 @@ if st.button("ចុចទីនេះដើម្បីវិភាគទីផ
                 tp = current_price * 0.985  # TP -1.5%
                 sl = current_price * 1.008  # SL +0.8%
                 st.write(f"🎯 *Take Profit (TP):* ${tp:.2f}")
-                st.write(f"🛑 *Stop Loss (SL):* ${sl:.2f}")
+                st.write(f"🛑 *Stop Loss (SL):* ${sl:.2f}") 
 
