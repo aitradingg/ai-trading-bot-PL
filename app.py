@@ -42,11 +42,6 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    
-    /* តុបតែងตาราง (Table) ឱ្យមើលងាយស្រួល */
-    dataframe, table {
-        border-radius: 8px !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -73,8 +68,8 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### 💳 ព័ត៌មានបង់ប្រាក់ (Subscription)")
 st.sidebar.info("តម្លៃសមាជិកភាព: **$10 / ខែ**\n\nABA Bank: 000 123 456 (ឈ្មោះរបស់អ្នក)`\n\n📲 Telegram: `@YourTelegramID")
 
-# ផ្ទាំងមេរបស់វេបសាយ
-tab1, tab2 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 ចំណេះដឹង Trading & Forex (ICT, FVG, BBMA)"])
+# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៣ សម្រាប់ការសន្ទនា / Live Chat)
+tab1, tab2, tab3 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 ចំណេះដឹង Trading & Forex", "💬 បន្ទប់សន្ទនា (Community Chat)"])
 
 with tab1:
     st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
@@ -203,3 +198,32 @@ with tab2:
     st.write("ICT គឺជាវិធីសាស្ត្រវិភាគតាមដាន Smart Money និង Liquidity ដ៏មានឥទ្ធិពល។")
     st.subheader("2. 🕳️ FVG & BBMA")
     st.write("សិក្សាពីចន្លោះ Imbalance និងការប្រើប្រាស់ Bollinger Bands ដើម្បីចាប់จุด Entry ស្អាតៗ។")
+
+with tab3:
+    st.title("💬 បន្ទប់សន្ទនា និងពិភាក្សាផ្ទាល់ (Community Chat)")
+    st.markdown("សួរសំណួរ ឬចែករំលែកបទពិសោធន៍ត្រេតជាមួយសមាជិកដទៃទៀតនៅទីនេះ!")
+
+    # រៀបចំប្រព័ន្ធរក្សាទុកសារសន្ទនាបណ្ដោះអាសន្នក្នុង Session State
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [
+            {"role": "assistant", "content": "សួស្ដី! សូមស្វាគមន៍មកកាន់បន្ទប់សន្ទនារបស់ពួកយើង។ តើថ្ងៃនេះមានអ្វីឱ្យខ្ញុំជួយទេ?"}
+        ]
+
+    # បង្ហាញសារចាស់ៗទាំងអស់
+    for msg in st.session_state["messages"]:
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+
+    # ប្រអប់វាយអត្ថបទសម្រាប់ផ្ញើសារថ្មី
+    if user_chat_input := st.chat_input("សរសេរសាររបស់អ្នកនៅទីនេះ..."):
+        # បន្ថែមសាររបស់អ្នកប្រើប្រាស់ចូលក្នុង List
+        st.session_state["messages"].append({"role": "user", "content": user_chat_input})
+        with st.chat_message("user"):
+            st.write(user_chat_input)
+
+        # ឆ្លើយតបស្វ័យប្រវត្ត ឬចាត់ចែងសារ
+        bot_reply = f"អរគុណចំពោះសាររបស់អ្នក៖ '{user_chat_input}'។ Admin នឹងធ្វើការឆ្លើយតបឆាប់ៗនេះ ឬអ្នកអាចទាក់ទងមក Telegram ផ្ទាល់ក៏បាន!"
+        st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
+        with st.chat_message("assistant"):
+            st.write(bot_reply)
+
