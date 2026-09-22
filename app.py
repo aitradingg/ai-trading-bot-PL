@@ -29,9 +29,9 @@ else:
 # បង្ហាញព័ត៌មានទំនាក់ទំនងបង់ប្រាក់ក្នុង Sidebar
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 💳 ព័ត៌មានបង់ប្រាក់ (Subscription)")
-st.sidebar.write("តម្លៃសមាជិកភាព: *$10 / ខែ*")
-st.sidebar.write("ABA Bank: 000 123 456 (ชื่อบัญชีของคุณ)")
-st.sidebar.markdown("📲 Telegram សម្រាប់ទិញកូដ: @YourTelegramID")
+st.sidebar.write("តម្លៃសមាជិកភាព: *$5 / ខែ*")
+st.sidebar.write("ABA Bank: 000 868 788 (ชื่อบัญชีของคุณ)")
+st.sidebar.markdown("📲 Telegram សម្រាប់ទិញកូដ: @ajkj123")
 
 # ផ្ទាំងមេរបស់វេបសាយ
 tab1, tab2 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 ចំណេះដឹង Trading & Forex (ICT, FVG, BBMA)"])
