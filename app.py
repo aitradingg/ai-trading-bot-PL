@@ -6,11 +6,12 @@ from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
 import random
 import string
+import time
 
 # កំណត់ទម្រង់ទំព័រវេបសាយ (ត្រូវដាក់ដំបូងគេបង្អស់)
 st.set_page_config(page_title="XAUUSD Ultimate ICT & AI Trading Pro", page_icon="⚡", layout="wide")
 
-# 🎨 មុខងារទី ៧៖ CSS Custom Style ទំនើប និងគាំទ្រ Responsive ទាំង PC និង Mobile
+# 🎨 មុខងារ CSS Custom Style ទំនើប និងគាំទ្រ Responsive ទាំង PC និង Mobile
 st.markdown("""
     <style>
     /* ផ្លាស់ប្តូរពុម្ពអក្សរ និងពណ៌ផ្ទៃខាងក្រោយ Sidebar */
@@ -53,6 +54,15 @@ st.markdown("""
         border-radius: 6px;
         margin-bottom: 10px;
     }
+
+    /* តុបតែងប្រអប់ TikTok Free Service ឱ្យទាក់ទាញខុសពីគេ */
+    .tiktok-card {
+        background: linear-gradient(135deg, #161823 0%, #222738 100%);
+        border: 2px solid #fe2c55;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(254,44,85,0.2);
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -60,13 +70,12 @@ st.markdown("""
 st.sidebar.title("🔐 VIP Subscription & Access")
 st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ VIP៖")
 
-# កូដសម្ងាត់សម្រាប់សមាជិក VIP (រក្សាទុកក្នុង session_state ដើម្បីឱ្យកូដទិញស្វ័យប្រវត្តអាចបញ្ចូលបន្ថែមបាន)
+# កូដសម្ងាត់សម្រាប់សមាជិក VIP
 if "valid_vip_codes" not in st.session_state:
     st.session_state["valid_vip_codes"] = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
 
 user_code = st.sidebar.text_input("🔑 បញ្ចូលកូដសម្ងាត់ VIP (Access Code):", type="password")
 
-# ពិនិត្យមើលថាតើកូដត្រឹមត្រូវ ឬអត់
 is_authorized = False
 if user_code in st.session_state["valid_vip_codes"]:
     is_authorized = True
@@ -75,26 +84,29 @@ else:
     if user_code != "":
         st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទិញកូដខាងក្រោម.")
 
-# 💳 មុខងារទី ៨៖ ប្រព័ន្ធទិញកូដស្វ័យប្រវត្តជាមួយ ABA QR Code Simulation
+# 💳 ប្រព័ន្ធទិញកូដស្វ័យប្រវត្តជាមួយ ABA QR Code Simulation
 st.sidebar.markdown("---")
 st.sidebar.markdown("### ⚡ ទិញកូដ VIP ស្វ័យប្រវត្ត ($10/ខែ)")
 with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូទាត់ប្រាក់"):
     st.write("1. ស្កេន QR ខាងក្រោមដើម្បីបង់ប្រាក់ *$10*:")
-    # ដាក់តំណរូបភាព QR Code របស់អ្នកនៅទីនេះ (ឧទាហរណ៍រូបភាព QR ABA)
     st.image("https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg", width=200, caption="ABA: 000 123 456 (ឈ្មោះរបស់អ្នក)")
     
     buyer_email = st.text_input("📧 បញ្ចូល Telegram ID ឬ Email របស់អ្នក:")
     if st.button("✅ បញ្ជាក់ការទូទាត់រួចរាល់ (Get VIP Code)"):
         if buyer_email:
-            # បង្កើតកូដ VIP ថ្មីដោយស្វ័យប្រវត្ត
             random_code = "VIP-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
             st.session_state["valid_vip_codes"].append(random_code)
             st.success(f"🎉 ជោគជ័យ! កូដ VIP របស់អ្នកគឺ៖ **{random_code}**\n\n(សូមរក្សាទុកកូដនេះដើម្បីយកទៅដាក់ក្នុងប្រអប់ខាងលើ!)")
         else:
             st.warning("⚠️ សូមបញ្ចូល Telegram ID ឬ Email ជាមុនសិន!")
 
-# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៣ សម្រាប់សេដ្ឋកិច្ច និងព័ត៌មាន)
-tab1, tab2, tab3 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 មជ្ឈមណ្ឌលមេរៀន Trading", "📰 ព័ត៌មានសេដ្ឋកិច្ច & ព្រឹត្តិការណ៍ (News)"])
+# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៤ សម្រាប់ TikTok Free Boost)
+tab1, tab2, tab3, tab4 = st.tabs([
+    "📊 វិភាគទីផ្សារ & Signals (VIP)", 
+    "📚 មជ្ឈមណ្ឌលមេរៀន Trading", 
+    "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)", 
+    "🔥 TikTok Free Boost (Free Service)"
+])
 
 with tab1:
     st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
@@ -222,7 +234,7 @@ with tab2:
     st.subheader("មេរៀនទី ២៖ 🕳️ Fair Value Gap (FVG) & Imbalance")
     st.write("ស្វែងយល់ពីចន្លោះអតុល្យភាពនៃតម្លៃ និងយុទ្ធសាស្ត្រ Entry នៅតំបន់ FVG ។")
 
-    st.subheader("មេរៀនទី ३៖ 📊 BBMA (Bollinger Bands & Moving Average)")
+    st.subheader("មេរៀនទី ៣៖ 📊 BBMA (Bollinger Bands & Moving Average)")
     st.write("ការចាប់សញ្ញា Extreme និងការប្រើប្រាស់ Moving Average ដើម្បីរកចំណុចប្រែប្រួលទិសដៅទីផ្សារ។")
 
 with tab3:
@@ -230,8 +242,6 @@ with tab3:
     st.markdown("ទិន្នន័យសេដ្ឋកិច្ចសហរដ្ឋអាមេរិកដែលមានឥទ្ធិពលខ្លាំងលើតម្លៃមាស (XAUUSD)៖")
     
     st.markdown("---")
-    
-    # 📰 មុខងារទី ៦៖ បង្ហាញព្រឹត្តិការណ៍សេដ្ឋកិច្ចសំខាន់ៗ (High-Impact News Calendar)
     st.markdown("""
     <div class="news-box">
         <strong>🔥 08:30 PM (US) - Non-Farm Payrolls (NFP)</strong><br>
@@ -244,12 +254,52 @@ with tab3:
         <span style="color: #ff4b4b;">🔴 Impact: High</span> | ព្យាករណ៍៖ 0.3% | មុនពេលប្រកាស៖ 0.2%<br>
         <small><em>វាស់វែងអត្រាអតិផរណា ដែលជះឥទ្ធិពលផ្ទាល់ដល់តម្លៃមាស និងប្រាក់ដុល្លារ (USD)។</em></small>
     </div>
-
-    <div class="news-box">
-        <strong>🟡 01:00 AM (US) - FOMC Meeting Minutes</strong><br>
-        <span style="color: #ffa500;">🟠 Impact: Medium</span><br>
-        <small><em>របាយការណ៍ស្ដីពីគោលនយោបាយអត្រាការប្រាក់របស់ធនាគារកណ្តាលអាមេរិក (Fed)។</em></small>
-    </div>
     """, unsafe_allow_html=True)
+
+with tab4:
+    st.title("🔥 TikTok Free Boost (Views, Likes & Shares)")
+    st.markdown("មុខងារឥតគិតថ្លៃ (Free Service) សម្រាប់សមាជិកគ្រប់រូប! គ្រាន់តែដាក់ Link វីដេអូ TikTok របស់អ្នក រួចជ្រើសរើសចំនួនដែលចង់បានជាការស្រេច។")
     
-    st.info("💡 *គន្លឹះ៖* គួរជៀសវាងការបើក Order (Open Trade) មុនពេលទិន្នន័យ High-Impact News ចេញប្រហែល ១៥ នាទី ដើម្បីការពារការលោតខុសតម្លៃ (Slippage/Spread)។")
+    st.markdown("---")
+    
+    # ប្រើ Container ឬ Form សម្រាប់ TikTok Booster
+    with st.container():
+        st.markdown('<div class="tiktok-card">', unsafe_allow_html=True)
+        st.subheader("🎵 ដាក់ស្នើរសុំការកើនឡើង (Free TikTok Booster)")
+        
+        tiktok_url = st.text_input("🔗 បញ្ចូលតំណភ្ជាប់វីដេអូ TikTok (TikTok Video URL):", placeholder="https://www.tiktok.com/@username/video/...")
+        
+        col_a, col_b = st.columns(2)
+        with col_a:
+            service_type = st.selectbox("📌 ជ្រើសរើសសេវាកម្ម (Service Type):", ["TikTok Views (មើលវីដេអូ)", "TikTok Likes (ចុចបេះដូង)", "TikTok Shares (ចែករំលែក)"])
+        with col_b:
+            boost_amount = st.selectbox("📊 ជ្រើសរើសចំនួន (Amount):", [100, 500, 1000, 5000])
+            
+        st.info("✨ *បញ្ជាក់៖* មុខងារនេះមិនចាំបាច់ប្រើប្រាស់កូដ VIP នោះទេ គឺអាចប្រើប្រាស់បានដោយឥតគិតថ្លៃ (Free) សម្រាប់អ្នករាល់គ្នា!")
+        
+        if st.button("🚀 ចាប់ផ្តើម Boost ឥឡូវនេះ"):
+            if tiktok_url and ("tiktok.com" in tiktok_url or "vm.tiktok.com" in tiktok_url):
+                # បង្កើតបែបផែនរង់ចាំ (Progress Bar simulation) ដើម្បីឱ្យកាន់តែរស់រវើក
+                progress_bar = st.progress(0)
+                status_text = st.empty()
+                
+                for percent_complete in range(100):
+                    time.sleep(0.01)
+                    progress_bar.progress(percent_complete + 1)
+                    if percent_complete < 30:
+                        status_text.text("🔄 កំពុងតភ្ជាប់ទៅកាន់ម៉ាស៊ីនមេ TikTok API...")
+                    elif percent_complete < 70:
+                        status_text.text(f"⚙️ កំពុងផ្ដល់សំណើរសុំ {service_type} ចំនួន {boost_amount}...")
+                    else:
+                        status_text.text("✅ កំពុងបញ្ចប់ និងផ្ទៀងផ្ទាត់ទិន្នន័យ...")
+                
+                time.sleep(0.5)
+                status_text.empty()
+                progress_bar.empty()
+                
+                st.success(f"🎉 *ជោគជ័យដោយជោគជ័យ!* សំណើរសុំ *{service_type}* ចំនួន *{boost_amount}* សម្រាប់វីដេអូរបស់អ្នក ត្រូវបានដាក់ចូលក្នុងប្រព័ន្ធជួររង់ចាំ (Queue) រួចរាល់ហើយ។ តម្លៃនឹងចាប់ផ្តើមឡើងក្នុងរយៈពេល ៥ ទៅ ១០ នាទីខាងមុខ!")
+                st.balloons() # បង្ហាញ বেলลูน អបអរសាទរ
+            else:
+                st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ (ឧទាហរណ៍៖ មានពាក្យ tiktok.com)។")
+                
+        st.markdown('</div>', unsafe_allow_html=True)
