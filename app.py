@@ -13,7 +13,7 @@ st.sidebar.title("🔐 VIP Subscription & Access")
 st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ដែលបានទូទាត់ប្រាក់រួច៖")
 
 # កូដសម្ងាត់សម្រាប់សមាជិក VIP (អ្នកអាចប្តូរលេខកូដនេះតាមចិត្ត ឬបង្កើតប្រព័ន្ធទូទាត់តាម KHQR របស់អ្នក)
-VALID_VIP_CODES = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
+VALID_VIP_CODES = ["viptes18", "PRO-TRADER-99", "MEMBER-XAUUSD"]
 
 user_code = st.sidebar.text_input("🔑 បញ្ចូលកូដសម្ងាត់ VIP (Access Code):", type="password")
 
