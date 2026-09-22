@@ -4,11 +4,13 @@ import numpy as np
 import yfinance as yf
 from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
+import random
+import string
 
-# កំណត់ទម្រង់ទំព័រវេបសាយ
+# កំណត់ទម្រង់ទំព័រវេបសាយ (ត្រូវដាក់ដំបូងគេបង្អស់)
 st.set_page_config(page_title="XAUUSD Ultimate ICT & AI Trading Pro", page_icon="⚡", layout="wide")
 
-# 🎨 ការតុបតែង CSS Custom Style ឱ្យវេបសាយមើលទៅស្អាត និងលេចធ្លោរជាងមុន
+# 🎨 មុខងារទី ៧៖ CSS Custom Style ទំនើប និងគាំទ្រ Responsive ទាំង PC និង Mobile
 st.markdown("""
     <style>
     /* ផ្លាស់ប្តូរពុម្ពអក្សរ និងពណ៌ផ្ទៃខាងក្រោយ Sidebar */
@@ -42,46 +44,67 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
+    /* តុបតែងប្រអប់ព័ត៌មាន News & Calendar ឱ្យទាក់ទាញ */
+    .news-box {
+        background-color: #1f242d;
+        border-left: 4px solid #FFD700;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 10px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # 🔐 ប្រព័ន្ធទូទាត់ប្រាក់ និងផ្ទៀងផ្ទាត់សិទ្ធិ (Access Code / Subscription System)
 st.sidebar.title("🔐 VIP Subscription & Access")
-st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ដែលបានទូទាត់ប្រាក់រួច៖")
+st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ VIP៖")
 
-# កូដសម្ងាត់សម្រាប់សមាជិក VIP
-VALID_VIP_CODES = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
+# កូដសម្ងាត់សម្រាប់សមាជិក VIP (រក្សាទុកក្នុង session_state ដើម្បីឱ្យកូដទិញស្វ័យប្រវត្តអាចបញ្ចូលបន្ថែមបាន)
+if "valid_vip_codes" not in st.session_state:
+    st.session_state["valid_vip_codes"] = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
 
 user_code = st.sidebar.text_input("🔑 បញ្ចូលកូដសម្ងាត់ VIP (Access Code):", type="password")
 
 # ពិនិត្យមើលថាតើកូដត្រឹមត្រូវ ឬអត់
 is_authorized = False
-if user_code in VALID_VIP_CODES:
+if user_code in st.session_state["valid_vip_codes"]:
     is_authorized = True
     st.sidebar.success("✅ បានផ្ទៀងផ្ទាត់សិទ្ធិ VIP ជោគជ័យ!")
 else:
     if user_code != "":
-        st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទំនាក់ទំនងអ្នកអភិវឌ្ឍន៍ដើម្បីទិញកូដဝင်ប្រើប្រាស់។")
+        st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទិញកូដខាងក្រោម.")
 
-# បង្ហាញព័ត៌មានទំនាក់ទំនងបង់ប្រាក់ក្នុង Sidebar
+# 💳 មុខងារទី ៨៖ ប្រព័ន្ធទិញកូដស្វ័យប្រវត្តជាមួយ ABA QR Code Simulation
 st.sidebar.markdown("---")
-st.sidebar.markdown("### 💳 ព័ត៌មានបង់ប្រាក់ (Subscription)")
-st.sidebar.info("តម្លៃសមាជិកភាព: **$10 / ខែ**\n\nABA Bank: 000 123 456 (ឈ្មោះរបស់អ្នក)`\n\n📲 Telegram: `@YourTelegramID")
+st.sidebar.markdown("### ⚡ ទិញកូដ VIP ស្វ័យប្រវត្ត ($10/ខែ)")
+with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូទាត់ប្រាក់"):
+    st.write("1. ស្កេន QR ខាងក្រោមដើម្បីបង់ប្រាក់ *$10*:")
+    # ដាក់តំណរូបភាព QR Code របស់អ្នកនៅទីនេះ (ឧទាហរណ៍រូបភាព QR ABA)
+    st.image("https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg", width=200, caption="ABA: 000 123 456 (ឈ្មោះរបស់អ្នក)")
+    
+    buyer_email = st.text_input("📧 បញ្ចូល Telegram ID ឬ Email របស់អ្នក:")
+    if st.button("✅ បញ្ជាក់ការទូទាត់រួចរាល់ (Get VIP Code)"):
+        if buyer_email:
+            # បង្កើតកូដ VIP ថ្មីដោយស្វ័យប្រវត្ត
+            random_code = "VIP-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+            st.session_state["valid_vip_codes"].append(random_code)
+            st.success(f"🎉 ជោគជ័យ! កូដ VIP របស់អ្នកគឺ៖ **{random_code}**\n\n(សូមរក្សាទុកកូដនេះដើម្បីយកទៅដាក់ក្នុងប្រអប់ខាងលើ!)")
+        else:
+            st.warning("⚠️ សូមបញ្ចូល Telegram ID ឬ Email ជាមុនសិន!")
 
-# ផ្ទាំងមេរបស់វេបសាយ
-tab1, tab2 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 មជ្ឈមណ្ឌលមេរៀន Trading ទាំងអស់ (Masterclass)"])
+# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៣ សម្រាប់សេដ្ឋកិច្ច និងព័ត៌មាន)
+tab1, tab2, tab3 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 មជ្ឈមណ្ឌលមេរៀន Trading", "📰 ព័ត៌មានសេដ្ឋកិច្ច & ព្រឹត្តិការណ៍ (News)"])
 
 with tab1:
     st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
     
-    # ពិនិត្យសិទ្ធិ៖ ប្រសិនបើមិនទាន់វាយកូដទេ មិនបង្ហាញមុខងារវិភាគទេ
     if not is_authorized:
-        st.warning("🔒 មាតិកានេះសម្រាប់តែសមាជិក VIP ដែលបានបង់ប្រាក់រួចប៉ុណ្ណោះ។ សូមបញ្ចូលកូដសម្ងាត់នៅប្រអប់ Sidebar ខាងឆ្វេងដើម្បីដោះសោរ!")
+        st.warning("🔒 មាតិកានេះសម្រាប់តែសមាជិក VIP ដែលបានបង់ប្រាក់រួចប៉ុណ្ណោះ។ សូមបញ្ចូលកូដសម្ងាត់នៅប្រអប់ Sidebar ខាងឆ្វេង ឬទិញតាម QR Code!")
         st.info("💡 ឧទាហរណ៍កូដតេស្តសាកល្បង: VIP-GOLD-2026")
     else:
         st.markdown("ប្រព័ន្ធវិភាគតម្លៃមាសកម្រិតខ្ពស់ ភ្ជាប់មកជាមួយប្រព័ន្ធទាញយកតម្លៃ Real-time និងកែតម្រូវតម្លៃឱ្យត្រូវ ១០០%។")
 
-        # 🛠️ បន្ថែមប្រអប់បញ្ចូលតម្លៃពិត (Live Price Override)
         st.sidebar.header("⚙️ ការកំណត់តម្លៃឱ្យត្រូវនឹង Broker")
         use_manual_price = st.sidebar.checkbox("បើកប្រើប្រាស់ការបញ្ជាក់តម្លៃដោយដៃ (Manual Price Override)", value=False)
         manual_market_price = st.sidebar.number_input("បញ្ចូលតម្លៃមាសបច្ចុប្បន្នតាម Broker របស់អ្នក៖", value=4315.00, step=0.1)
@@ -190,46 +213,43 @@ with tab1:
 
 with tab2:
     st.title("📚 មជ្ឈមណ្ឌលមេរៀន Trading ទាំងអស់ (Pro Masterclass)")
-    st.markdown("ស្វែងយល់ពីបច្ចេកទេសត្រេតសំខាន់ៗទាំងមូលពីកម្រិតមូលដ្ឋានដល់កម្រិតអាជីព (ICT, FVG, BBMA, Price Action & Risk Management) ដើម្បីយកទៅអភិវឌ្ឍន៍ជំនាញរបស់អ្នក!")
+    st.markdown("ស្វែងយល់ពីបច្ចេកទេសត្រេតសំខាន់ៗទាំងមូលពីកម្រិតមូលដ្ឋានដល់កម្រិតអាជីព (ICT, FVG, BBMA, Price Action & Risk Management)!")
+    
+    st.markdown("---")
+    st.subheader("មេរៀនទី ១៖ 🌐 គោលគំនិត ICT & Smart Money")
+    st.write("ការតាមដានដានជើងរបស់ Market Maker, Market Structure Shift (MSS) និង Liquidity Pools ។")
+
+    st.subheader("មេរៀនទី ២៖ 🕳️ Fair Value Gap (FVG) & Imbalance")
+    st.write("ស្វែងយល់ពីចន្លោះអតុល្យភាពនៃតម្លៃ និងយុទ្ធសាស្ត្រ Entry នៅតំបន់ FVG ។")
+
+    st.subheader("មេរៀនទី ३៖ 📊 BBMA (Bollinger Bands & Moving Average)")
+    st.write("ការចាប់សញ្ញា Extreme និងការប្រើប្រាស់ Moving Average ដើម្បីរកចំណុចប្រែប្រួលទិសដៅទីផ្សារ។")
+
+with tab3:
+    st.title("📰 ព័ត៌មានសេដ្ឋកិច្ច និងព្រឹត្តិការណ៍សំខាន់ៗ (Economic Calendar & Live News)")
+    st.markdown("ទិន្នន័យសេដ្ឋកិច្ចសហរដ្ឋអាមេរិកដែលមានឥទ្ធិពលខ្លាំងលើតម្លៃមាស (XAUUSD)៖")
     
     st.markdown("---")
     
-    # ជំពូកទី ១
-    st.subheader("មេរៀនទី ១៖ 🌐 គោលគំនិត ICT (Inner Circle Trader) & Smart Money")
-    st.write("""
-    - *Smart Money Concepts (SMC):* ការតាមដានដានជើងរបស់ Market Maker (ស្ថាប័នហិរញ្ញវត្ថុធំៗ) មិនមែនមើលតែ Retail Traders ទេ។
-    - *Market Structure Shift (MSS) & Change of Character (ChoCH):* ការប្តូរទិសដៅនិន្នាការពី Uptrend ទៅ Downtrend ឬច្រាសមកវិញ។
-    - *Liquidity Pools:* ការបរបាញ់ Stop Loss របស់ Trader ធម្មតានៅតាមតំបន់ Equal Highs / Equal Lows មុនពេលតម្លៃរត់ខ្លាំង។
-    """)
-
-    # ជំពូកទី ២
-    st.subheader("មេរៀនទី ២៖ 🕳️ Fair Value Gap (FVG) & Imbalance")
-    st.write("""
-    - *តើអ្វីជា FVG?* គឺជាចន្លោះប្រហោងនៃតម្លៃដែលកើតឡើងពេលទីផ្សាររត់លឿនខ្លាំង (Impulsive Move) បន្សល់ទុកនូវអតុល្យភាព (Imbalance) រវាង Buyer និង Seller។
-    - *ការចូលលក់/ទិញ (Entry Strategy):* រង់ចាំឱ្យតម្លៃធ្លាក់ ឬងើបចូលមកតំបន់ FVG វិញ (Mitigation) សឹមធ្វើការ Open Order (Buy/Sell)។
-    """)
-
-    # ជំពូកទី ៣
-    st.subheader("មេរៀនទី ៣៖ 📊 BBMA (Bollinger Bands & Moving Average) Strategy")
-    st.write("""
-    - *การดู Extreme:* ពេលដែលក្រមួន (Candle) បើក ឬបិទហៀរផុតខ្សែ Bollinger Bands លើ ឬក្រោម បង្ហាញពីសញ្ញាត្រៀមបដិសេធតម្លៃ (Reversal)។
-    - *Market Reentry (Extrem -> M.A -> Reentry):* បច្ចេកទេសចូលទីផ្សារតាមរយះខ្សែមធ្យម Moving Average ពេលតម្លៃត្រឡប់មកតំរែតម្រង់។
-    """)
-
-    # ជំពូកទី ៤
-    st.subheader("មេរៀនទី ៤៖ 🕯️ Price Action & Candlestick Patterns")
-    st.write("""
-    - *Pin Bar / Rejection:* ទៀនដែលមានដុះកន្ទុយវែង បង្ហាញពីការបដិសេធតម្លៃយ៉ាងខ្លាំងពីភាគីម្ខាងទៀត។
-    - *Engulfing Pattern:* ទៀនធំ בליបស៊ីបទៀនតូចមុនវា បង្ហាញពីកម្លាំងជំរុញទីផ្សារយ៉ាងច្បាស់លាស់។
-    - *Support & Resistance:* កម្រិតគាំទ្រ និងប្រឆាំងដ៏មានឥទ្ធិពលដែលតម្លៃតែងតែប្រតិកម្ម។
-    """)
-
-    # ជំពូកទី ៥
-    st.subheader("មេរៀនទី ៥៖ 💰 Risk Management & Psychology (ការគ្រប់គ្រងហានិភ័យ)")
-    st.write("""
-    - *Risk-to-Reward Ratio (RRR):* គួររក្សាអត្រាការខាតបង់ទាបជាងប្រាក់ចំណេញ យ៉ាងតិចណាស់ 1:2 ឬ 1:3។
-    - *Lot Size Calculation:* កុំប្រថុយទឹកប្រាក់ច្រើនពេកក្នុងមួយតេដ (មិនគួរលើសពី 1%-2% នៃទុនសរុបក្នុងមួយ Trade)។
-    - *Trading Psychology:* ការគ្រប់គ្រងអារម្មណ៍ មិនត្រូវ Overtrade ឬ Revenge Trade ពេលជួបការខាតបង់ឡើយ។
-    """)
+    # 📰 មុខងារទី ៦៖ បង្ហាញព្រឹត្តិការណ៍សេដ្ឋកិច្ចសំខាន់ៗ (High-Impact News Calendar)
+    st.markdown("""
+    <div class="news-box">
+        <strong>🔥 08:30 PM (US) - Non-Farm Payrolls (NFP)</strong><br>
+        <span style="color: #ff4b4b;">🔴 Impact: High</span> | ព្យាករណ៍៖ 180K | មុនពេលប្រកាស៖ 150K<br>
+        <small><em>ការណ៍នេះនឹងធ្វើឱ្យតម្លៃមាស (XAUUSD) ប្រែប្រួលខ្លាំងក្នុងរយៈពេលខ្លី សូមប្រយ័ត្នការដាក់ Lot ធំ!</em></small>
+    </div>
     
-    st.success("💡 *គន្លឹះ៖* មេរៀនទាំងនេះត្រូវបានរៀបចំឡើងជាពិសេសដើម្បីជួយឱ្យសមាជិក VIP ទាំងអស់អាចវិភាគទីផ្សារបានដោយខ្លួនឯងយ៉ាងស្ទាត់ជំនាញ!")
+    <div class="news-box">
+        <strong>⚠️ 07:30 PM (US) - Consumer Price Index (CPI m/m)</strong><br>
+        <span style="color: #ff4b4b;">🔴 Impact: High</span> | ព្យាករណ៍៖ 0.3% | មុនពេលប្រកាស៖ 0.2%<br>
+        <small><em>វាស់វែងអត្រាអតិផរណា ដែលជះឥទ្ធិពលផ្ទាល់ដល់តម្លៃមាស និងប្រាក់ដុល្លារ (USD)។</em></small>
+    </div>
+
+    <div class="news-box">
+        <strong>🟡 01:00 AM (US) - FOMC Meeting Minutes</strong><br>
+        <span style="color: #ffa500;">🟠 Impact: Medium</span><br>
+        <small><em>របាយការណ៍ស្ដីពីគោលនយោបាយអត្រាការប្រាក់របស់ធនាគារកណ្តាលអាមេរិក (Fed)។</em></small>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.info("💡 *គន្លឹះ៖* គួរជៀសវាងការបើក Order (Open Trade) មុនពេលទិន្នន័យ High-Impact News ចេញប្រហែល ១៥ នាទី ដើម្បីការពារការលោតខុសតម្លៃ (Slippage/Spread)។")
