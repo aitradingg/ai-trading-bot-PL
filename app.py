@@ -68,8 +68,8 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### 💳 ព័ត៌មានបង់ប្រាក់ (Subscription)")
 st.sidebar.info("តម្លៃសមាជិកភាព: **$10 / ខែ**\n\nABA Bank: 000 123 456 (ឈ្មោះរបស់អ្នក)`\n\n📲 Telegram: `@YourTelegramID")
 
-# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៣ សម្រាប់ការសន្ទនា / Live Chat)
-tab1, tab2, tab3 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 ចំណេះដឹង Trading & Forex", "💬 បន្ទប់សន្ទនា (Community Chat)"])
+# ផ្ទាំងមេរបស់វេបសាយ
+tab1, tab2 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 មជ្ឈមណ្ឌលមេរៀន Trading ទាំងអស់ (Masterclass)"])
 
 with tab1:
     st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
@@ -189,41 +189,47 @@ with tab1:
                     st.table(sl_df)
 
 with tab2:
-    st.title("📚 មជ្ឈមណ្ឌលចំណេះដឹង Trading & Forex (Pro Masterclass)")
-    st.markdown("เรียนรู้เทคนิคการเทรดระดับสูง ทั้ง ICT, FVG, BBMA และการบริหารความเสี่ยงอย่างมืออาชีพ")
-    st.write("ផ្នែកនេះអាចបើកចំហជូនសាធារណជនទូទៅអានได้ ដើម្បីទាក់ទាញអតិថិជនមកទិញកូដ VIP!")
+    st.title("📚 មជ្ឈមណ្ឌលមេរៀន Trading ទាំងអស់ (Pro Masterclass)")
+    st.markdown("ស្វែងយល់ពីបច្ចេកទេសត្រេតសំខាន់ៗទាំងមូលពីកម្រិតមូលដ្ឋានដល់កម្រិតអាជីព (ICT, FVG, BBMA, Price Action & Risk Management) ដើម្បីយកទៅអភិវឌ្ឍន៍ជំនាញរបស់អ្នក!")
     
     st.markdown("---")
-    st.subheader("1. 🌐 什么是 ICT (Inner Circle Trader) Concepts?")
-    st.write("ICT គឺជាវិធីសាស្ត្រវិភាគតាមដាន Smart Money និង Liquidity ដ៏មានឥទ្ធិពល។")
-    st.subheader("2. 🕳️ FVG & BBMA")
-    st.write("សិក្សាពីចន្លោះ Imbalance និងការប្រើប្រាស់ Bollinger Bands ដើម្បីចាប់จุด Entry ស្អាតៗ។")
+    
+    # ជំពូកទី ១
+    st.subheader("មេរៀនទី ១៖ 🌐 គោលគំនិត ICT (Inner Circle Trader) & Smart Money")
+    st.write("""
+    - *Smart Money Concepts (SMC):* ការតាមដានដានជើងរបស់ Market Maker (ស្ថាប័នហិរញ្ញវត្ថុធំៗ) មិនមែនមើលតែ Retail Traders ទេ។
+    - *Market Structure Shift (MSS) & Change of Character (ChoCH):* ការប្តូរទិសដៅនិន្នាការពី Uptrend ទៅ Downtrend ឬច្រាសមកវិញ។
+    - *Liquidity Pools:* ការបរបាញ់ Stop Loss របស់ Trader ធម្មតានៅតាមតំបន់ Equal Highs / Equal Lows មុនពេលតម្លៃរត់ខ្លាំង។
+    """)
 
-with tab3:
-    st.title("💬 បន្ទប់សន្ទនា និងពិភាក្សាផ្ទាល់ (Community Chat)")
-    st.markdown("សួរសំណួរ ឬចែករំលែកបទពិសោធន៍ត្រេតជាមួយសមាជិកដទៃទៀតនៅទីនេះ!")
+    # ជំពូកទី ២
+    st.subheader("មេរៀនទី ២៖ 🕳️ Fair Value Gap (FVG) & Imbalance")
+    st.write("""
+    - *តើអ្វីជា FVG?* គឺជាចន្លោះប្រហោងនៃតម្លៃដែលកើតឡើងពេលទីផ្សាររត់លឿនខ្លាំង (Impulsive Move) បន្សល់ទុកនូវអតុល្យភាព (Imbalance) រវាង Buyer និង Seller។
+    - *ការចូលលក់/ទិញ (Entry Strategy):* រង់ចាំឱ្យតម្លៃធ្លាក់ ឬងើបចូលមកតំបន់ FVG វិញ (Mitigation) សឹមធ្វើការ Open Order (Buy/Sell)។
+    """)
 
-    # រៀបចំប្រព័ន្ធរក្សាទុកសារសន្ទនាបណ្ដោះអាសន្នក្នុង Session State
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = [
-            {"role": "assistant", "content": "សួស្ដី! សូមស្វាគមន៍មកកាន់បន្ទប់សន្ទនារបស់ពួកយើង។ តើថ្ងៃនេះមានអ្វីឱ្យខ្ញុំជួយទេ?"}
-        ]
+    # ជំពូកទី ៣
+    st.subheader("មេរៀនទី ៣៖ 📊 BBMA (Bollinger Bands & Moving Average) Strategy")
+    st.write("""
+    - *การดู Extreme:* ពេលដែលក្រមួន (Candle) បើក ឬបិទហៀរផុតខ្សែ Bollinger Bands លើ ឬក្រោម បង្ហាញពីសញ្ញាត្រៀមបដិសេធតម្លៃ (Reversal)។
+    - *Market Reentry (Extrem -> M.A -> Reentry):* បច្ចេកទេសចូលទីផ្សារតាមរយះខ្សែមធ្យម Moving Average ពេលតម្លៃត្រឡប់មកតំរែតម្រង់។
+    """)
 
-    # បង្ហាញសារចាស់ៗទាំងអស់
-    for msg in st.session_state["messages"]:
-        with st.chat_message(msg["role"]):
-            st.write(msg["content"])
+    # ជំពូកទី ៤
+    st.subheader("មេរៀនទី ៤៖ 🕯️ Price Action & Candlestick Patterns")
+    st.write("""
+    - *Pin Bar / Rejection:* ទៀនដែលមានដុះកន្ទុយវែង បង្ហាញពីការបដិសេធតម្លៃយ៉ាងខ្លាំងពីភាគីម្ខាងទៀត។
+    - *Engulfing Pattern:* ទៀនធំ בליបស៊ីបទៀនតូចមុនវា បង្ហាញពីកម្លាំងជំរុញទីផ្សារយ៉ាងច្បាស់លាស់។
+    - *Support & Resistance:* កម្រិតគាំទ្រ និងប្រឆាំងដ៏មានឥទ្ធិពលដែលតម្លៃតែងតែប្រតិកម្ម។
+    """)
 
-    # ប្រអប់វាយអត្ថបទសម្រាប់ផ្ញើសារថ្មី
-    if user_chat_input := st.chat_input("សរសេរសាររបស់អ្នកនៅទីនេះ..."):
-        # បន្ថែមសាររបស់អ្នកប្រើប្រាស់ចូលក្នុង List
-        st.session_state["messages"].append({"role": "user", "content": user_chat_input})
-        with st.chat_message("user"):
-            st.write(user_chat_input)
-
-        # ឆ្លើយតបស្វ័យប្រវត្ត ឬចាត់ចែងសារ
-        bot_reply = f"អរគុណចំពោះសាររបស់អ្នក៖ '{user_chat_input}'។ Admin នឹងធ្វើការឆ្លើយតបឆាប់ៗនេះ ឬអ្នកអាចទាក់ទងមក Telegram ផ្ទាល់ក៏បាន!"
-        st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
-        with st.chat_message("assistant"):
-            st.write(bot_reply)
-
+    # ជំពូកទី ៥
+    st.subheader("មេរៀនទី ៥៖ 💰 Risk Management & Psychology (ការគ្រប់គ្រងហានិភ័យ)")
+    st.write("""
+    - *Risk-to-Reward Ratio (RRR):* គួររក្សាអត្រាការខាតបង់ទាបជាងប្រាក់ចំណេញ យ៉ាងតិចណាស់ 1:2 ឬ 1:3។
+    - *Lot Size Calculation:* កុំប្រថុយទឹកប្រាក់ច្រើនពេកក្នុងមួយតេដ (មិនគួរលើសពី 1%-2% នៃទុនសរុបក្នុងមួយ Trade)។
+    - *Trading Psychology:* ការគ្រប់គ្រងអារម្មណ៍ មិនត្រូវ Overtrade ឬ Revenge Trade ពេលជួបការខាតបង់ឡើយ។
+    """)
+    
+    st.success("💡 *គន្លឹះ៖* មេរៀនទាំងនេះត្រូវបានរៀបចំឡើងជាពិសេសដើម្បីជួយឱ្យសមាជិក VIP ទាំងអស់អាចវិភាគទីផ្សារបានដោយខ្លួនឯងយ៉ាងស្ទាត់ជំនាញ!")
