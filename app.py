@@ -8,12 +8,54 @@ import streamlit as st
 # កំណត់ទម្រង់ទំព័រវេបសាយ
 st.set_page_config(page_title="XAUUSD Ultimate ICT & AI Trading Pro", page_icon="⚡", layout="wide")
 
+# 🎨 ការតុបតែង CSS Custom Style ឱ្យវេបសាយមើលទៅស្អាត និងលេចធ្លោរជាងមុន
+st.markdown("""
+    <style>
+    /* ផ្លាស់ប្តូរពុម្ពអក្សរ និងពណ៌ផ្ទៃខាងក្រោយ Sidebar */
+    [data-testid="stSidebar"] {
+        background-color: #0e1117;
+        border-right: 1px solid #262730;
+    }
+    
+    /* តុបតែងប្រអប់ Button ឱ្យមានពណ៌មាសលេចធ្លោរ និងរង្វង់មូលស្អាត */
+    .stButton > button {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        color: #0e1117;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+    .stButton > button:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(255,215,0,0.3);
+    }
+
+    /* តុបតែងប្រអប់ Metric Cards ឱ្យមានស៊ុម និងស្រមោលស្អាត */
+    [data-testid="stMetric"] {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    /* តុបតែងตาราง (Table) ឱ្យមើលងាយស្រួល */
+    dataframe, table {
+        border-radius: 8px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # 🔐 ប្រព័ន្ធទូទាត់ប្រាក់ និងផ្ទៀងផ្ទាត់សិទ្ធិ (Access Code / Subscription System)
 st.sidebar.title("🔐 VIP Subscription & Access")
 st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ដែលបានទូទាត់ប្រាក់រួច៖")
 
-# កូដសម្ងាត់សម្រាប់សមាជិក VIP (អ្នកអាចប្តូរលេខកូដនេះតាមចិត្ត ឬបង្កើតប្រព័ន្ធទូទាត់តាម KHQR របស់អ្នក)
-VALID_VIP_CODES = ["viptes18", "PRO-TRADER-99", "MEMBER-XAUUSD"]
+# កូដសម្ងាត់សម្រាប់សមាជិក VIP
+VALID_VIP_CODES = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
 
 user_code = st.sidebar.text_input("🔑 បញ្ចូលកូដសម្ងាត់ VIP (Access Code):", type="password")
 
@@ -24,14 +66,12 @@ if user_code in VALID_VIP_CODES:
     st.sidebar.success("✅ បានផ្ទៀងផ្ទាត់សិទ្ធិ VIP ជោគជ័យ!")
 else:
     if user_code != "":
-        st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមติดต่อអ្នកអភិវឌ្ឍន៍ដើម្បីទិញកូដဝင်ប្រើប្រាស់។")
+        st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទំនាក់ទំនងអ្នកអភិវឌ្ឍន៍ដើម្បីទិញកូដဝင်ប្រើប្រាស់។")
 
 # បង្ហាញព័ត៌មានទំនាក់ទំនងបង់ប្រាក់ក្នុង Sidebar
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 💳 ព័ត៌មានបង់ប្រាក់ (Subscription)")
-st.sidebar.write("តម្លៃសមាជិកភាព: *$5 / ខែ*")
-st.sidebar.write("ABA Bank: 000 868 788 (ชื่อบัญชีของคุณ)")
-st.sidebar.markdown("📲 Telegram សម្រាប់ទិញកូដ: @ajkj123")
+st.sidebar.info("តម្លៃសមាជិកភាព: **$10 / ខែ**\n\nABA Bank: 000 123 456 (ឈ្មោះរបស់អ្នក)`\n\n📲 Telegram: `@YourTelegramID")
 
 # ផ្ទាំងមេរបស់វេបសាយ
 tab1, tab2 = st.tabs(["📊 វិភាគទីផ្សារ & Signals (VIP)", "📚 ចំណេះដឹង Trading & Forex (ICT, FVG, BBMA)"])
@@ -72,7 +112,7 @@ with tab1:
                 df = yf.download(ticker, start='2023-01-01', end=today, progress=False)
                 
                 if df.empty:
-                    st.error("មិនអាចទាញយកទិន្នន័យប្រវត្តិសាស្ត្រได้ទេ ប៉ុន្តែតម្លៃបច្ចុប្បន្នត្រូវបានកំណត់រួចរាល់។")
+                    st.error("មិនអាចទាញយកទិន្នន័យប្រវត្តិសាស្ត្របានទេ ប៉ុន្តែតម្លៃបច្ចុប្បន្នត្រូវបានកំណត់រួចរាល់។")
                 else:
                     if isinstance(df.columns, pd.MultiIndex):
                         df.columns = df.columns.get_level_values(0)
@@ -111,7 +151,7 @@ with tab1:
                     
                     st.success("✅ ដោះសោរជោគជ័យ! ទិន្នន័យទីផ្សារត្រូវបានទាញយក ១០០%!")
                     col1, col2, col3 = st.columns(3)
-                    col1.metric(label="💰 តម្លៃមាសបច្ចុប្បន្ន (Live Market Price)", value=f"${current_price:.2f}")
+                    col1.metric(label="💰 តម្លៃមាសបច្ចុប្បន្ន", value=f"${current_price:.2f}")
                     col2.metric(label="📊 RSI (14)", value=f"{current_rsi:.2f}")
                     col3.metric(label="🌐 ស្ថានភាពទីផ្សារ", value="Overbought / Oversold" if current_rsi > 70 or current_rsi < 30 else "Normal Trend")
                     
@@ -156,11 +196,10 @@ with tab1:
 with tab2:
     st.title("📚 មជ្ឈមណ្ឌលចំណេះដឹង Trading & Forex (Pro Masterclass)")
     st.markdown("เรียนรู้เทคนิคการเทรดระดับสูง ทั้ง ICT, FVG, BBMA และการบริหารความเสี่ยงอย่างมืออาชีพ")
-    st.write("ផ្នែកនេះអាចបើកចំហជូនសាធារណជនទូទៅអានបាន ដើម្បីទាក់ទាញអតិថិជនមកទិញកូដ VIP!")
+    st.write("ផ្នែកនេះអាចបើកចំហជូនសាធារណជនទូទៅអានได้ ដើម្បីទាក់ទាញអតិថិជនមកទិញកូដ VIP!")
     
     st.markdown("---")
     st.subheader("1. 🌐 什么是 ICT (Inner Circle Trader) Concepts?")
     st.write("ICT គឺជាវិធីសាស្ត្រវិភាគតាមដាន Smart Money និង Liquidity ដ៏មានឥទ្ធិពល។")
     st.subheader("2. 🕳️ FVG & BBMA")
     st.write("សិក្សាពីចន្លោះ Imbalance និងការប្រើប្រាស់ Bollinger Bands ដើម្បីចាប់จุด Entry ស្អាតៗ។")
-
