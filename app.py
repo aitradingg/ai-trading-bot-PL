@@ -419,8 +419,8 @@ elif menu == "🤖 Auto & Copy Trading Simulation":
             
         submitted = st.form_submit_button("🔗 ភ្ជាប់គណនីស្វ័យប្រវត្តិ (Connect Copy Bot)")
         if submitted:
-            if account_id and account_password:
-                st.success(لن موفقیت! គណនីលេខ *{account_id}* បានភ្ជាប់ដោយជោគជ័យជាមួយប្រព័ន្ធ Copy Trading របស់ XAUUSD Pro!");
+            if account_id and account_password:OfPu@8st
+                st.success(لن موفقیت! គណនីលេខ *{113059003}* បានភ្ជាប់ដោយជោគជ័យជាមួយប្រព័ន្ធ Copy Trading របស់ XAUUSD Pro!");
             else:
                 st.error("សូមបំពេញលេខគណនី និងលេខសម្ងាត់ឱ្យបានត្រឹមត្រូវ។");
 
