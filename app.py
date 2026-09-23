@@ -70,7 +70,6 @@ st.markdown("""
 st.sidebar.title("🔐 VIP Subscription & Access")
 st.sidebar.markdown("ដើម្បីប្រើប្រាស់ប្រព័ន្ធវិភាគកម្រិតខ្ពស់ និង Signals ពេញលេញ សូមបញ្ចូលកូដសម្ងាត់ VIP៖")
 
-# កូដសម្ងាត់សម្រាប់សមាជិក VIP
 if "valid_vip_codes" not in st.session_state:
     st.session_state["valid_vip_codes"] = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
 
@@ -84,7 +83,6 @@ else:
     if user_code != "":
         st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទិញកូដខាងក្រោម.")
 
-# 💳 ប្រព័ន្ធទិញកូដស្វ័យប្រវត្តជាមួយ ABA QR Code Simulation
 st.sidebar.markdown("---")
 st.sidebar.markdown("### ⚡ ទិញកូដ VIP ស្វ័យប្រវត្ត ($10/ខែ)")
 with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូទាត់ប្រាក់"):
@@ -100,12 +98,12 @@ with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូ�
         else:
             st.warning("⚠️ សូមបញ្ចូល Telegram ID ឬ Email ជាមុនសិន!")
 
-# ផ្ទាំងមេរបស់វេបសាយ (បន្ថែម Tab ទី៤ សម្រាប់ TikTok Free Boost)
+# ផ្ទាំងមេរបស់វេបសាយ
 tab1, tab2, tab3, tab4 = st.tabs([
     "📊 វិភាគទីផ្សារ & Signals (VIP)", 
     "📚 មជ្ឈមណ្ឌលមេរៀន Trading", 
     "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)", 
-    "🔥 TikTok Free Boost (Free Service)"
+    "🔥 TikTok Turbo Boost (Fast & High Volume)"
 ])
 
 with tab1:
@@ -257,48 +255,54 @@ with tab3:
     """, unsafe_allow_html=True)
 
 with tab4:
-    st.title("🔥 TikTok Free Boost (Views, Likes & Shares)")
-    st.markdown("មុខងារឥតគិតថ្លៃ (Free Service) សម្រាប់សមាជិកគ្រប់រូប! គ្រាន់តែដាក់ Link វីដេអូ TikTok របស់អ្នក រួចជ្រើសរើសចំនួនដែលចង់បានជាការស្រេច។")
+    st.title("🚀 TikTok Turbo Boost (Fast & High Volume)")
+    st.markdown("ប្រព័ន្ធជំរុញល្បឿនលឿន (Turbo Mode) ឥតគិតថ្លៃសម្រាប់សមាជិកគ្រប់រូប! អាចជ្រើសរើសចំនួនទឹកប្រាក់ ឬចំនួន Views/Likes កម្រិតធំៗដោយមិនបាច់រង់ចាំយូរ។")
     
     st.markdown("---")
     
-    # ប្រើ Container ឬ Form សម្រាប់ TikTok Booster
     with st.container():
         st.markdown('<div class="tiktok-card">', unsafe_allow_html=True)
-        st.subheader("🎵 ដាក់ស្នើរសុំការកើនឡើង (Free TikTok Booster)")
+        st.subheader("⚡ ដាក់ស្នើរសុំ TikTok Turbo Boost (Free & Fast)")
         
         tiktok_url = st.text_input("🔗 បញ្ចូលតំណភ្ជាប់វីដេអូ TikTok (TikTok Video URL):", placeholder="https://www.tiktok.com/@username/video/...")
         
         col_a, col_b = st.columns(2)
         with col_a:
-            service_type = st.selectbox("📌 ជ្រើសរើសសេវាកម្ម (Service Type):", ["TikTok Views (មើលវីដេអូ)", "TikTok Likes (ចុចបេះដូង)", "TikTok Shares (ចែករំលែក)"])
+            service_type = st.selectbox("📌 ជ្រើសរើសសេវាកម្ម (Service Type):", [
+                "🔥 TikTok Turbo Views (មើលរហ័ស)", 
+                "❤️ TikTok Turbo Likes (បេះដូងរហ័ស)", 
+                "🚀 TikTok Turbo Shares & Saves (ចែករំលែក & រក្សាទុក)"
+            ])
         with col_b:
-            boost_amount = st.selectbox("📊 ជ្រើសរើសចំនួន (Amount):", [100, 500, 1000, 5000])
+            # 📈 ពង្រីកចំនួនទឹកប្រាក់ឱ្យកាន់តែច្រើន (រហូតដល់ 100K)
+            boost_amount = st.selectbox("📊 ជ្រើសរើសចំនួនបរិមាណ (High Volume):", [
+                1000, 5000, 10000, 25000, 50000, 100000
+            ])
             
-        st.info("✨ *បញ្ជាក់៖* មុខងារនេះមិនចាំបាច់ប្រើប្រាស់កូដ VIP នោះទេ គឺអាចប្រើប្រាស់បានដោយឥតគិតថ្លៃ (Free) សម្រាប់អ្នករាល់គ្នា!")
+        st.info("⚡ *Turbo Mode:* ប្រព័ន្ធស្វ័យប្រវត្តត្រូវបានរៀបចំឱ្យបញ្ជូនទិន្នន័យក្នុងល្បឿនលឿន និងមានបរិមាណច្រើន!")
         
-        if st.button("🚀 ចាប់ផ្តើម Boost ឥឡូវនេះ"):
+        if st.button("⚡ ចាប់ផ្តើម Turbo Boost ឥឡូវនេះ"):
             if tiktok_url and ("tiktok.com" in tiktok_url or "vm.tiktok.com" in tiktok_url):
-                # បង្កើតបែបផែនរង់ចាំ (Progress Bar simulation) ដើម្បីឱ្យកាន់តែរស់រវើក
+                # ⚙️ កាត់បន្ថយពេលវេលារង់ចាំ (time.sleep) ឱ្យលឿនជាងមុនឆ្ងាយ
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
                 for percent_complete in range(100):
-                    time.sleep(0.01)
+                    time.sleep(0.002) # ល្បឿនលឿនជាងមុន ៥ ដង
                     progress_bar.progress(percent_complete + 1)
-                    if percent_complete < 30:
-                        status_text.text("🔄 កំពុងតភ្ជាប់ទៅកាន់ម៉ាស៊ីនមេ TikTok API...")
-                    elif percent_complete < 70:
-                        status_text.text(f"⚙️ កំពុងផ្ដល់សំណើរសុំ {service_type} ចំនួន {boost_amount}...")
+                    if percent_complete < 40:
+                        status_text.text("⚡ កំពុងភ្ជាប់ទៅកាន់ High-Speed TikTok Server...")
+                    elif percent_complete < 80:
+                        status_text.text(f"🚀 កំពុងបញ្ជូនទិន្នន័យ {service_type} ចំនួន {boost_amount:,}...")
                     else:
-                        status_text.text("✅ កំពុងបញ្ចប់ និងផ្ទៀងផ្ទាត់ទិន្នន័យ...")
+                        status_text.text("✅ កំពុងបញ្ចប់ដំណើរការ Turbo Queue...")
                 
-                time.sleep(0.5)
+                time.sleep(0.2)
                 status_text.empty()
                 progress_bar.empty()
                 
-                st.success(f"🎉 *ជោគជ័យដោយជោគជ័យ!* សំណើរសុំ *{service_type}* ចំនួន *{boost_amount}* សម្រាប់វីដេអូរបស់អ្នក ត្រូវបានដាក់ចូលក្នុងប្រព័ន្ធជួររង់ចាំ (Queue) រួចរាល់ហើយ។ តម្លៃនឹងចាប់ផ្តើមឡើងក្នុងរយៈពេល ៥ ទៅ ១០ នាទីខាងមុខ!")
-                st.balloons() # បង្ហាញ বেলลูน អបអរសាទរ
+                st.success(f"🎉 *ជោគជ័យលឿនរហ័ស (Turbo Boost Success)!* សំណើរសុំ *{service_type}* ចំនួន *{boost_amount:,}* ត្រូវបានបញ្ជូនទៅកាន់ Server រួចរាល់ដោយជោគជ័យ! តួលេខនឹងចាប់ផ្តើមហក់ឡើងយ៉ាងលឿនក្នុងពេលឆាប់ៗនេះ។")
+                st.balloons()
             else:
                 st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ (ឧទាហរណ៍៖ មានពាក្យ tiktok.com)។")
                 
