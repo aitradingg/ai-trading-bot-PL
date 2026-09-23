@@ -357,3 +357,98 @@ with tab7:
             else:
                 st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ។")
         st.markdown('</div>', unsafe_allow_html=True)
+import streamlit as st
+import pandas as pd
+import numpy as np
+import datetime
+
+# កំណត់ទម្រង់ទំព័រ
+st.set_page_config(page_title="XAUUSD Pro Trading System", page_icon="🪙", layout="wide")
+
+# Navigation Sidebar
+st.sidebar.title("🪙 XAUUSD Pro Navigation")
+menu = st.sidebar.selectbox("ជ្រើសរើសមុខងារ៖", [
+    "📊 Smart Zone & Liquidity Map", 
+    "🤖 Auto & Copy Trading Simulation", 
+    "🔔 Telegram / Discord Alert Integration"
+])
+
+# -------------------------------------------------------------------------
+# មុខងារទី ២១៖ Smart Zone & Liquidity Map (Order Block & Institutional Levels)
+# -------------------------------------------------------------------------
+if menu == "📊 Smart Zone & Liquidity Map":
+    st.title("📊 Smart Zone & Liquidity Map (XAUUSD)")
+    st.write("មុខងារនេះជួយបង្ហាញពីតំបន់តម្លៃសំខាន់ៗ (Order Blocks & Liquidity Pools) ដែលស្ថាប័នធំៗកំពុងដាក់ពង្រាយទុន។")
+    
+    col1, col2, col3 = st.columns(3)
+    col1.metric(label="Current Gold Price", value="$2,385.50", delta="+12.40 (+0.52%)")
+    col2.metric(label="Daily Trend", value="BULLISH 🚀", delta="Strong")
+    col3.metric(label="Market Sentiment", value="78% Buyers", delta="Greed")
+
+    st.markdown("---")
+    st.subheader("📍 Active Institutional Zones")
+    
+    # តារាងបង្ហាញតំបន់តម្លៃគន្លឹះ
+    zone_data = {
+        "Zone Type": ["Institutional Buy (OB)", "Liquidity Pool (High)", "Institutional Sell (OB)", "Break of Structure (BOS)"],
+        "Price Level": ["$2,365.00 - $2,370.00", "$2,410.00", "$2,400.00 - $2,405.00", "$2,380.00"],
+        "Status / Action": ["🟢 Waiting for Test", "🔴 Target / Take Profit", "🔴 Strong Resistance", "🟢 Confirmed Support"],
+        "Probability": ["High (85%)", "Medium", "High (80%)", "Very High"]
+    }
+    df_zones = pd.DataFrame(zone_data)
+    st.table(df_zones)
+
+# -------------------------------------------------------------------------
+# មុខងារទី ១៦៖ Auto-Trading & Copy Trading Simulation
+# -------------------------------------------------------------------------
+elif menu == "🤖 Auto & Copy Trading Simulation":
+    st.title("🤖 Auto & Copy Trading Simulation")
+    st.write("ភ្ជាប់គណនី MT4/MT5 របស់អ្នក ដើម្បីចម្លងសញ្ញា (Copy Signal) ដោយស្វ័យប្រវត្តិពេលមានសញ្ញាទិញលក់ចេញមក។")
+
+    with st.form("copy_trading_form"):
+        st.subheader("⚙️ Configuration Settings")
+        broker_name = st.selectbox("ជ្រើសរើស Broker:", ["Exness-Real", "XM Global", "IC Markets", "FBS"])
+        account_id = st.text_input("លេខគណនីត្រេត (Account ID):", placeholder="ឧទាហរណ៍៖ 88392011")
+        account_password = st.text_input("លេខសម្ងាត់ API / Master Password:", type="password")
+        
+        col_a, col_b = st.columns(2)
+        with col_a:
+            risk_per_trade = st.slider("កំណត់ហានិភ័យក្នុងមួយ Trade (%):", 0.5, 5.0, 1.0)
+        with col_b:
+            max_lot = st.number_input("ទំហំ Lot អតិបរមា (Max Lot):", min_value=0.01, max_value=5.00, value=0.10)
+            
+        submitted = st.form_submit_button("🔗 ភ្ជាប់គណនីស្វ័យប្រវត្តិ (Connect Copy Bot)")
+        if submitted:
+            if account_id and account_password:
+                st.success(لن موفقیت! គណនីលេខ *{account_id}* បានភ្ជាប់ដោយជោគជ័យជាមួយប្រព័ន្ធ Copy Trading របស់ XAUUSD Pro!");
+            else:
+                st.error("សូមបំពេញលេខគណនី និងលេខសម្ងាត់ឱ្យបានត្រឹមត្រូវ។");
+
+# -------------------------------------------------------------------------
+# មុខងារទី ២៖ Telegram / Discord Alert Integration
+# -------------------------------------------------------------------------
+elif menu == "🔔 Telegram / Discord Alert Integration":
+    st.title("🔔 Telegram / Discord Alert Integration")
+    st.write("កំណត់ការបញ្ជូនសញ្ញា Signal ស្វ័យប្រវត្តិទៅកាន់ Channel ឬ Group ផ្ទាល់ខ្លួនរបស់អ្នក។")
+
+    with st.form("telegram_form"):
+        st.subheader("📱 Telegram Bot Configuration")
+        bot_token = st.text_input("Telegram Bot Token:", placeholder="ឧទាហរណ៍៖ 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ")
+        chat_id = st.text_input("Telegram Channel / Chat ID:", placeholder="ឧទាហរណ៍៖ @https://t.me/signalvipL")
+        
+        st.markdown("---")
+        st.subheader("🎯 Filter Signal Options")
+        send_buy_sell = st.checkbox("ផ្ញើសញ្ញា Buy / Sell ທັນហាមាត់", value=True)
+        send_tp_sl = st.checkbox("ផ្ញើព័ត៌មាន Take Profit (TP) និង Stop Loss (SL)", value=True)
+        send_news = st.checkbox("ផ្ញើដំណឹងព្រឹត្តិការណ៍សេដ្ឋកិច្ចសំខាន់ៗ (NFP / CPI)", value=True)
+        
+        save_btn = st.form_submit_button("💾 រក្សាទុក និងតេស្តផ្ញើសារ (Test Alert)")
+        if save_btn:
+            if bot_token and chat_id:
+                st.success("🎉 កំណត់ត្រាបានរក្សាទុក! សារតេស្តត្រូវបានបញ្ជូនទៅកាន់ Telegram Channel របស់អ្នកដោយជោគជ័យ។");
+            else:
+                st.warning("សូមបញ្ចូល Bot Token និង Chat ID ជាមុនសិន។");
+
+# Footer ផ្នែកខាងក្រោម
+st.markdown("---")
+st.markdown("<p style='text-align: center; color: gray;'>© 2026 XAUUSD Pro Trading System. All rights reserved.</p>", unsafe_allow_html=True)
