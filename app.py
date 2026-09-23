@@ -440,3 +440,39 @@ def add_pro_features_section():
 
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
 add_pro_features_section()
+# យកកូដនេះទៅដាក់ជំនួសកន្លែង Tab Telegram ចាស់របស់អ្នក (ឧទាហរណ៍ with tab3:)
+with tab3:
+    st.markdown("### 🔔 Telegram Bot Integration (Live Sender)")
+    st.write("បញ្ជូនសញ្ញា Signal ពិតប្រាកដទៅកាន់ Telegram Channel របស់អ្នក។")
+
+    with st.form("telegram_form_live"):
+        bot_token = st.text_input("Telegram Bot Token:", placeholder="ឧទាហរណ៍៖ 8961670095:AAEs...")
+        chat_id = st.text_input("Telegram Channel / Chat ID:", placeholder="ឧទាហរណ៍៖ @Signalvip")
+        
+        test_message = st.text_area("សារសម្រាប់តេស្ត (Test Message):", value="🚨 XAUUSD Pro Alert: Gold Market Signal Test Successful! 🚀 Buy @ 2380.00")
+        
+        save_btn = st.form_submit_button("🚀 ផ្ញើសារទៅ Telegram ឥឡូវនេះ")
+        
+        if save_btn:
+            if bot_token and chat_id:
+                telegram_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+                payload = {
+                    "chat_id": chat_id,
+                    "text": test_message,
+                    "parse_mode": "Markdown"
+                }
+                
+                try:
+                    response = requests.post(telegram_url, json=payload)
+                    res_data = response.json()
+                    
+                    if res_data.get("ok"):
+                        st.success("🎉 ជោគជ័យ! សារបានបញ្ជូនចូលទៅកាន់ Telegram Channel របស់បងរួចរាល់ហើយ!")
+                    else:
+                        error_desc = res_data.get("description", "Unknown error")
+                        st.error(f"❌ បរាជ័យពី Telegram API: {error_desc}")
+                except Exception as e:
+                    st.error(f"❌ កំហុសក្នុងការតភ្ជាប់: {e}")
+            else:
+                st.warning("⚠️ សូមបំពេញ Bot Token និង Telegram Channel/Chat ID ឱ្យបានត្រឹមត្រូវសិន។")
+                
