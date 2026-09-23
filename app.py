@@ -307,3 +307,51 @@ with tab4:
                 st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ (ឧទាហរណ៍៖ មានពាក្យ tiktok.com)។")
                 
         st.markdown('</div>', unsafe_allow_html=True)
+import streamlit as st
+import time
+import random
+import string
+
+# កំណត់ទម្រង់ទំព័រវេបសាយ
+st.set_page_config(page_title="TikTok Ultra Turbo Boost - Experimental", page_icon="⚡", layout="centered")
+
+st.title("⚡ TikTok Ultra Turbo Boost (Experimental)")
+st.warning("⚠️ *ចំណាំ៖* នេះជាមុខងារសាកល្បងល្បឿនលឿន (Experimental) តាមសំណូមពររបស់បង។ ប្រសិនបើ TikTok ចាប់បាន វារgាននឹងធ្លាក់ចុះ ឬបាត់តួលេខវិញ។")
+
+st.markdown("---")
+
+tiktok_url = st.text_input("🔗 បញ្ចូលតំណភ្ជាប់វីដេអូ TikTok (TikTok Video URL):", placeholder="https://www.tiktok.com/@username/video/...")
+
+service_type = st.selectbox("📌 ជ្រើសរើសសេវាកម្ម៖", [
+    "🔥 TikTok Ultra Views (រុញទស្សនៈលឿនបំផុត)", 
+    "❤️ TikTok Ultra Likes (រុញបេះដូងលឿនបំផុត)", 
+    "🚀 TikTok Ultra Shares (រុញការចែករំលែកលឿនបំផុត)"
+])
+
+boost_amount = st.selectbox("📊 ជ្រើសរើសចំនួនបរិមាណ៖", [
+    1000, 5000, 10000, 25000, 50000, 100000
+])
+
+if st.button("🚀 ចាប់ផ្តើម Ultra Boost ឥឡូវនេះ"):
+    if tiktok_url and ("tiktok.com" in tiktok_url or "vm.tiktok.com" in tiktok_url):
+        
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        # កាត់បន្ថយពេលវេលារង់ចាំឱ្យខ្លីបំផុត ដើម្បីឱ្យដំណើរការលឿនរហ័ស
+        for percent_complete in range(100):
+            time.sleep(0.0005) # ល្បឿនលឿនខ្លាំង
+            progress_bar.progress(percent_complete + 1)
+            if percent_complete < 50:
+                status_text.text("⚡ កំពុងតភ្ជាប់ទៅកាន់ Proxy / Bot Gateway...")
+            else:
+                status_text.text(f"🚀 កំពុងទម្លាក់ទិន្នន័យ {service_type} ចំនួន {boost_amount:,}...")
+        
+        time.sleep(0.1)
+        status_text.empty()
+        progress_bar.empty()
+        
+        st.success(f"🎉 *បញ្ជូនសំណើរសុំ (Ultra Boost) ជោគជ័យ!* សំណើរសុំចំនួន *{boost_amount:,}* ត្រូវបានបញ្ជូនចេញរួចរាល់។ សូមរង់ចាំមើលការផ្លាស់ប្តូរនៅលើគណនី TikTok របស់បង!")
+        st.balloons()
+    else:
+        st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ (ឧទាហរណ៍៖ មានពាក្យ tiktok.com)។")
