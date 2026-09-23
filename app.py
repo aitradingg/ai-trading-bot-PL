@@ -422,7 +422,7 @@ elif menu == "🤖 Auto & Copy Trading Simulation":
             if account_id and account_password:OfPu@8st
                 st.success(لن موفقیت! គណនីលេខ *{113059003}* បានភ្ជាប់ដោយជោគជ័យជាមួយប្រព័ន្ធ Copy Trading របស់ XAUUSD Pro!");
             else:
-                st.error("សូមបំពេញលេខគណនី និងលេខសម្ងាត់ឱ្យបានត្រឹមត្រូវ។");
+                st.error("113059003 OfPu@8st។");
 
 # -------------------------------------------------------------------------
 # មុខងារទី ២៖ Telegram / Discord Alert Integration
