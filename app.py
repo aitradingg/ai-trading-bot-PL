@@ -482,4 +482,8 @@ if menu == "💰 Earning & VIP Center":
         # បង្ហាញតារាងចំណូលគំរូ
         st.metric(label="ចំណូលសរុបខែនេះ (Total Revenue)", value="$128.50", delta="+$24.00 ថ្ងៃនេះ")
         st.metric(label="ចំនួនសរុបការបញ្ជាទិញពេជ្រ & SMM", value="45 Orders")
+        st.subheader("📊 ស្ថិតិចំណូលសរុប (Admin View)")
+        # បង្ហាញតារាងចំណូលគំរូ
+        st.metric(label="ចំណូលសរុបខែនេះ (Total Revenue)", value="$128.50", delta="+$24.00 ថ្ងៃនេះ")
+        st.metric(label="ចំនួនសរុបការបញ្ជាទិញពេជ្រ & SMM", value="45 Orders")
 
