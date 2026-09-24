@@ -440,3 +440,50 @@ def add_pro_features_section():
 
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
 add_pro_features_section()
+# -------------------------------------------------------------------------
+# មុខងារ TikTok Fast Booster (SMM API Integration) - យកកូដនេះទៅដាក់តពីកូដចាស់
+# -------------------------------------------------------------------------
+st.markdown("---")
+st.subheader("🚀 TikTok Fast Booster (Views & Likes)")
+st.write("ប្រព័ន្ធបញ្ជាបញ្ជូនសំណើ Boost វីដេអូ TikTok ឱ្យឡើងចំនួន View/Like រហ័សទាន់ចិត្ត។")
+
+with st.form("tiktok_booster_form_simple"):
+    smm_api_url = st.text_input("SMM API Endpoint URL:", placeholder="ឧទាហរណ៍៖ https://smm-provider-api.com/api/v2")
+    smm_api_key = st.text_input("SMM API Key:", type="password", placeholder="បញ្ចូល API Key របស់អ្នក")
+    
+    video_url = st.text_input("TikTok Video URL:", placeholder="ឧទាហរណ៍៖ https://www.tiktok.com/@username/video/...")
+    
+    service_type = st.selectbox("ជ្រើសរើសប្រភេទសេវាកម្ម:", [
+        "TikTok Views (Super Fast - 1-3 mins)", 
+        "TikTok Likes (Fast Delivery)", 
+        "TikTok Views + Likes Combo"
+    ])
+    
+    quantity = st.number_input("ចំនួនដែលចង់បាន (Quantity):", min_value=100, max_value=50000, value=1000, step=100)
+    
+    boost_btn = st.form_submit_button("⚡ ចាប់ផ្តើម Boost ភ្លាមៗ")
+    
+    if boost_btn:
+        if smm_api_url and smm_api_key and video_url:
+            payload = {
+                "key": smm_api_key,
+                "action": "add",
+                "service": 101,
+                "link": video_url,
+                "quantity": quantity
+            }
+            
+            try:
+                response = requests.post(smm_api_url, data=payload)
+                res_json = response.json()
+                
+                if "order" in res_json or res_json.get("status") == "success":
+                    order_id = res_json.get("order", "N/A")
+                    st.success(f"🎉 ជោគជ័យ! Order ID: {order_id} វីដេអូនឹងចាប់ផ្តើមឡើង View/Like ក្នុង ១-៣ នាទីខាងមុខនេះ!")
+                else:
+                    st.error(f"❌ បរាជ័យពី SMM API: {res_json}")
+            except Exception as e:
+                st.error(f"❌ កំហុសក្នុងការតភ្ជាប់: {e}")
+        else:
+            st.warning("⚠️ សូមបំពេញព័ត៌មាន API និង URL ឱ្យបានគ្រប់គ្រាន់។")
+
