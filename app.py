@@ -440,161 +440,46 @@ def add_pro_features_section():
 
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
 add_pro_features_section()
-menu = st.sidebar.selectbox("ជ្រើសរើសមុខងារ៖", [
-    "📊 Smart Zone & Liquidity Map", 
-    "🤖 Auto & Copy Trading Simulation", 
-    "🔔 Telegram / Discord Alert Integration",
-    "🚀 TikTok Fast Booster (SMM API)",
-    "🎬 Anime Streaming Center"  # <--- បន្ថែមរസ്‌មីទីនេះ
-])
 # -------------------------------------------------------------------------
-# មុខងារ Anime Streaming Center (២០ រឿងពេញនិយម) - យកកូដនេះទៅដាក់តពីក្រោមគេបង្អស់
+# មុខងារ Earning & VIP Center (សម្រាប់រកប្រាក់ចំណូល)
 # -------------------------------------------------------------------------
-if menu == "🎬 Anime Streaming Center":
-    st.title("🎬 Anime Streaming Center (Top 20 Animes)")
-    st.write("ទស្សនារឿង Anime ល្បីៗទាំង ២០ រឿងដោយផ្ទាល់នៅលើវេបសាយរបស់អ្នក។")
+if menu == "💰 Earning & VIP Center":
+    st.title("💰 Earning & VIP Center")
+    st.write("ប្រព័ន្ធគ្រប់គ្រងចំណូល និងកញ្ចប់សមាជិក VIP របស់អ្នក។")
 
-    anime_list = [
-        "🔥 Jujutsu Kaisen",
-        "⚔️ Demon Slayer",
-        "⚡ Attack on Titan",
-        "🌊 One Piece",
-        "🍥 Naruto Shippuden",
-        "🐉 Dragon Ball Z",
-        "🦸‍♂️ My Hero Academia",
-        "🪚 Chainsaw Man",
-        "🕵️‍♂️ Spy x Family",
-        "🏍️ Tokyo Revengers",
-        "🎯 Hunter x Hunter",
-        "☠️ Bleach",
-        "📓 Death Note",
-        "🛡️ Fullmetal Alchemist: Brotherhood",
-        "⏳ Steins;Gate",
-        "👑 Solo Leveling",
-        "🏐 Haikyuu!!",
-        "⚽ Blue Lock",
-        "⛵ Vinland Saga",
-        "🦾 Cyberpunk: Edgerunners"
-    ]
+    tab1, tab2, tab3 = st.tabs(["💎 ទិញកញ្ចប់ VIP (Anime & AI)", "☕ ឧបត្ថម្ភថវិកា (Donate)", "📊 មើលទឹកប្រាក់ចំណូល (Earnings Dashboard)"])
 
-    selected_anime = st.selectbox("ជ្រើសរើសរឿង Anime ដែលចង់ទស្សនា៖", anime_list)
+    with tab1:
+        st.subheader(" nângកម្រិតជាសមាជិក VIP")
+        st.write("ទទួលបានសិទ្ធិមើលរឿង Anime គ្រប់រឿង និងប្រើប្រាស់ AI គ្មានដែនកំណត់!")
+        
+        vip_package = st.selectbox("ជ្រើសរើសកញ្ចប់ VIP៖", [
+            "⭐ VIP 1 ខែ - $3.00",
+            "🌟 VIP 3 ខែ - $8.00",
+            "👑 VIP មួយឆ្នាំ - $25.00"
+        ])
+        
+        st.info("📌 វិធីទូទាត់៖ សូមស្កេន QR Code ខាងក្រោម រួចថតរូបវិក្កយបត្រ (Receipt) បញ្ជូនមកកាន់តេឡេក្រាមរបស់អ្នកគ្រប់គ្រង។")
+        
+        # ឧទាហរណ៍បង្ហាញ QR Code (បងអាចប្តូរយករូប QR ABA របស់បងមកដាក់)
+        st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&auto=format&fit=crop&q=60", caption="ABA / Bakong QR Code", width=250)
+        
+        user_tg = st.text_input("ឈ្មោះ Telegram ឬ លេខទូរសព្ទរបស់អ្នក៖")
+        if st.button("✅ បញ្ជាក់ការទូទាត់ប្រាក់ VIP"):
+            if user_tg:
+                st.success(f"🎉 សំណើរបស់អ្នកសម្រាប់កញ្ចប់ {vip_package} បានបញ្ជូនជោគជ័យ! សូមរង់ចាំ Admin ពិនិត្យវិក្កយបត្របន្តិច។")
+            else:
+                st.warning("⚠️ សូមបញ្ចូលឈ្មោះ Telegram របស់អ្នកដើម្បីឱ្យ Admin ទាក់ទងវិញ។")
 
-    st.markdown("---")
-    st.subheader(f" đangចាក់បញ្ចាំង៖ {selected_anime}")
+    with tab2:
+        st.subheader("☕ ឧបត្ថម្ភគាំទ្រអ្នកអភិវឌ្ឍន៍ (Buy Me a Coffee)")
+        st.write("ប្រសិនបើវេបសាយនេះមានប្រយោជន៍ បងប្អូនអាចជួយឧបត្ថម្ភថវិកាเล็กៗน้อยๆ បាន៖")
+        st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&auto=format&fit=crop&q=60", caption="ABA Donate QR", width=250)
+        st.write("🙏 សូមអរគុណទុកជាមុនចំពោះការគាំទ្រ!")
 
-    # កូដបង្ហាញវីដេអូនិងសាច់រឿងតាមរឿងនីមួយៗ
-    if "Jujutsu Kaisen" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ពិភពលោកពោរពេញដោយបណ្តាសា និងសិស្សសាលាអប្សរ Yuji Itadori។")
-        st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
-    elif "Demon Slayer" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ការដំណើរកំចាត់បិសាចដើម្បីសង្គ្រោះប្អូនស្រីរបស់ Tanjiro។")
-        st.video("https://www.youtube.com/watch?v=VQ6lftbvCB4")
-    elif "Attack on Titan" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ការប្រយុទ្ធគ្នារវាងមនុស្ស និងទីតាំងយក្សដើម្បីស្វែងរកសេរីភាព។")
-        st.video("https://www.youtube.com/watch?v=M_OauHnAFc8")
-    elif "One Piece" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ការផ្សងព្រេងរបស់ Luffy និងបក្សពួកដើម្បីក្លាយជាស្តេចចោរសមុទ្រ។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Naruto" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ក្មេងប្រុសបំរុងក្លាយជា Hokage ដ៏អស្ចារ្យក្នុងភូមិលាក់ខ្លួន។")
-        st.video("https://www.youtube.com/watch?v=-G9BqkgZXRA")
-    elif "Dragon Ball Z" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ការការពារផែនដីពីពួកសត្រូវខ្លាំងៗរបស់ Goku និងមិត្តភ័ក្តិ។")
-        st.video("https://www.youtube.com/watch?v=cc4p07k6C0w")
-    elif "My Hero Academia" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ពិភពលោកដែលមនុស្សមានថាមពលពិសេស (Quirk) និងសាលាហ្វឹកហ្វឺនវីរបុរស។")
-        st.video("https://www.youtube.com/watch?v=EP_W91hUGSU")
-    elif "Chainsaw Man" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Denji ដែលមានកម្លាំងបិសាចរណារយន្ត រស់ក្នុងជីវិតដ៏លំបាក។")
-        st.video("https://www.youtube.com/watch?v=j9SgTNzIwwI")
-    elif "Spy x Family" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ភ្នាក់ងារសម្ងាត់បង្កើតគ្រួសារក្លែងក្លាយ ដែលមានប្រពន្ធជាឃាតក និងកូនស្រីចេះអានចិត្ត។")
-        st.video("https://www.youtube.com/watch?v=cck_spzx-VE")
-    elif "Tokyo Revengers" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Takemichi ធ្វើដំណើរឆ្លងពេលវេលាទៅអតីតកាលដើម្បីសង្គ្រោះសង្សារ។")
-        st.video("https://www.youtube.com/watch?v=7M7o3m9j2s8")
-    elif "Hunter x Hunter" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Gon ដើរតាមគន្លងឪពុកដើម្បីប្រឡងជា Hunter ដ៏ពូកែ។")
-        st.video("https://www.youtube.com/watch?v=d6kUnGhDmGE")
-    elif "Bleach" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Ichigo ក្លាយជា Shinigami (ยมរាជ) ដើម្បីការពារមនុស្សលោកពីបិសាច Hollow។")
-        st.video("https://www.youtube.com/watch?v=1u44h0i_D88")
-    elif "Death Note" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Light Yagami រើសបានសៀវភៅមរណៈហើយប្រើវាដើម្បីជម្រះឧក្រិដ្ឋជន។")
-        st.video("https://www.youtube.com/watch?v=NlJZ-Ygsh_A")
-    elif "Fullmetal Alchemist" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* បងប្អូន Elric ប្រើវិជ្ជា alchemy ដើម្បីស្វែងរកតួខ្លួនវិញ។")
-        st.video("https://www.youtube.com/watch?v=tdb0oE6Vn8U")
-    elif "Steins;Gate" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ក្រុមអ្នកវិទ្យាសាស្ត្របង្កើតម៉ាស៊ីនផ្ញើសារទៅអតីតកាលដោយចៃដន្យ។")
-        st.video("https://www.youtube.com/watch?v=27OZlohUzrM")
-    elif "Solo Leveling" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* Sung Jin-woo ក្លាយជា Hunter ដែលមានប្រព័ន្ធ System កើនកម្រិតអស្ចារ្យ។")
-        st.video("https://www.youtube.com/watch?v=W0l_V6Zz4XQ")
-    elif "Haikyuu" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* ការតស៊ូក្នុងកីឡាបាល់ទះថ្នាក់វិទ្យាល័យរបស់ Hinata និង Kageyama។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Blue Lock" in selected_anime:
-        st.write("", "កម្មវិធីប្រកួតប្រជែងជ្រើសរើសកីឡាករបាល់ទះ/បាល់ទាត់ដ៏តឹងរឹងបំផុត។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Vinland Saga" in selected_anime:
-        st.write("*សាច់រឿងសង្ខេប៖* រឿងរ៉ាវប្រវត្តិសាស្ត្ររបស់ពួក Viking និងការសងសឹក។")
-        st.video("https://www.youtube.com/watch?v=hO3z3hU11b4")
-    else:
-        st.write("*សាច់រឿងសង្ខេប៖* ជីវិតរស់នៅ និងការប្រយុទ្ធគ្នាក្នុងទីក្រុងអនាគត Night City។")
-        st.video("https://www.youtube.com/watch?v=JtqIas3bYhg")
-import streamlit as st
-import openai
-import google.generativeai as genai
+    with tab3:
+        st.subheader("📊 ស្ថិតិចំណូលសរុប (Admin View)")
+        # បង្ហាញតារាងចំណូលគំរូ
+        st.metric(label="ចំណូលសរុបខែនេះ (Total Revenue)", value="$128.50", delta="+$24.00 ថ្ងៃនេះ")
+        st.metric(label="ចំនួនសរុបការបញ្ជាទិញពេជ្រ & SMM", value="45 Orders")
 
-# -------------------------------------------------------------------------
-# មុខងារ Multi-AI Chat Center (ChatGPT & Gemini)
-# -------------------------------------------------------------------------
-st.markdown("---")
-st.subheader("🤖 Multi-AI Chat Assistant (ChatGPT & Gemini)")
-st.write("សួរសំណួរផ្សេងៗទៅកាន់ AI ដែលបងចង់បាននៅកន្លែងតែមួយ។")
-
-# ជ្រើសរើសប្រភេទ AI
-ai_choice = st.selectbox("ជ្រើសរើស AI Model៖", [
-    "✨ Google Gemini",
-    "🟢 ChatGPT (OpenAI)"
-])
-
-# ប្រអប់បញ្ចូល API Key (បងអាចដាក់ជា Key ផ្ទាល់ខ្លួន ឬកូដលាក់)
-if "Gemini" in ai_choice:
-    api_key = st.text_input("បញ្ចូល Google Gemini API Key:", type="password")
-    if api_key:
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-flash')
-else:
-    api_key = st.text_input("បញ្ចូល OpenAI (ChatGPT) API Key:", type="password")
-    if api_key:
-        openai.api_key = api_key
-
-# ប្រអប់សួរសំណួរ
-user_prompt = st.text_area("សរសរសំណួរ ឬបញ្ហារបស់បងទីនេះ៖", placeholder="ឧទាហរណ៍៖ តើសេដ្ឋកិច្ចមាសឆ្នាំនេះយ៉ាងម៉េចដែរ?")
-
-if st.button("🚀 បញ្ជូនសំណួរទៅ AI"):
-    if not api_key:
-        st.warning("⚠️ សូមបញ្ចូល API Key ឱ្យបានត្រឹមត្រូវសិន។")
-    elif not user_prompt:
-        st.warning("⚠️ សូមសរសេរសំណួររបស់អ្នកជាមុនសិន។")
-    else:
-        with st.spinner("AI កំពុងគិត និងឆ្លើយតប..."):
-            try:
-                if "Gemini" in ai_choice:
-                    # ហៅប្រើប្រាស់ Gemini API
-                    response = model.generate_content(user_prompt)
-                    st.success("លទ្ធផលពី Google Gemini៖")
-                    st.write(response.text)
-                else:
-                    # ហៅប្រើប្រាស់ ChatGPT API
-                    client = openai.OpenAI(api_key=api_key)
-                    response = client.chat.completions.create(
-                        model="gpt-3.5-turbo",
-                        messages=[{"role": "user", "content": user_prompt}]
-                    )
-                    st.success("លទ្ធផលពី ChatGPT៖")
-                    st.write(response.choices[0].message.content)
-            except Exception as e:
-                st.error(f"មានបញ្ហាក្នុងការភ្ជាប់៖ {e}")
