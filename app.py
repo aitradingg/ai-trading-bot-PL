@@ -440,39 +440,106 @@ def add_pro_features_section():
 
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
 add_pro_features_section()
-# -------------------------------------------------------------------------
-# មុខងារ Anime Streaming Center - ដាក់តពីក្រោមគេបង្អស់
-# -------------------------------------------------------------------------
-st.markdown("---")
-st.subheader("🎬 Anime Streaming Center")
-st.write("ទស្សនារឿង Anime ល្បីៗ និងពេញនិយមដោយផ្ទាល់ទីនេះ។")
-
-# បញ្ជីរឿង Anime គំរូ (បងអាចប្តូរ Link វីដេអូ ឬរូបភាពតាមចិត្ត)
-anime_choice = st.selectbox("ជ្រើសរើសរឿង Anime៖", [
-    "🔥 Jujutsu Kaisen Season 2", 
-    "⚔️ Demon Slayer: Hashira Training Arc", 
-    "⚡ Attack on Titan: Final Chapters",
-    "🌊 One Piece"
+menu = st.sidebar.selectbox("ជ្រើសរើសមុខងារ៖", [
+    "📊 Smart Zone & Liquidity Map", 
+    "🤖 Auto & Copy Trading Simulation", 
+    "🔔 Telegram / Discord Alert Integration",
+    "🚀 TikTok Fast Booster (SMM API)",
+    "🎬 Anime Streaming Center"  # <--- បន្ថែមរസ്‌មីទីនេះ
 ])
+# -------------------------------------------------------------------------
+# មុខងារ Anime Streaming Center (២០ រឿងពេញនិយម) - យកកូដនេះទៅដាក់តពីក្រោមគេបង្អស់
+# -------------------------------------------------------------------------
+if menu == "🎬 Anime Streaming Center":
+    st.title("🎬 Anime Streaming Center (Top 20 Animes)")
+    st.write("ទស្សនារឿង Anime ល្បីៗទាំង ២០ រឿងដោយផ្ទាល់នៅលើវេបសាយរបស់អ្នក។")
 
-if "Jujutsu Kaisen" in anime_choice:
-    st.image("https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=60", caption="Jujutsu Kaisen")
-    st.write("*សាច់រឿងសង្ខេប៖* រឿងរ៉ាវរបស់ Yuji Itadori និងមិត្តភ័ក្តិក្នុងពិភពអប្សរ និងបណ្តាសា។")
-    # ទីនេះបងអាចដាក់ Link វីដេអូ YouTube ឬ Video Player របស់ Streamlit
-    st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
+    anime_list = [
+        "🔥 Jujutsu Kaisen",
+        "⚔️ Demon Slayer",
+        "⚡ Attack on Titan",
+        "🌊 One Piece",
+        "🍥 Naruto Shippuden",
+        "🐉 Dragon Ball Z",
+        "🦸‍♂️ My Hero Academia",
+        "🪚 Chainsaw Man",
+        "🕵️‍♂️ Spy x Family",
+        "🏍️ Tokyo Revengers",
+        "🎯 Hunter x Hunter",
+        "☠️ Bleach",
+        "📓 Death Note",
+        "🛡️ Fullmetal Alchemist: Brotherhood",
+        "⏳ Steins;Gate",
+        "👑 Solo Leveling",
+        "🏐 Haikyuu!!",
+        "⚽ Blue Lock",
+        "⛵ Vinland Saga",
+        "🦾 Cyberpunk: Edgerunners"
+    ]
 
-elif "Demon Slayer" in anime_choice:
-    st.image("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=60", caption="Demon Slayer")
-    st.write("*សាច់រឿងសង្ខេប៖* ការដំណើរកំចាត់បិសាចរបស់ Tanjiro ដើម្បីជួយសង្គ្រោះប្អូនស្រី។")
-    st.video("https://www.youtube.com/watch?v=VQ6lftbvCB4")
+    selected_anime = st.selectbox("ជ្រើសរើសរឿង Anime ដែលចង់ទស្សនា៖", anime_list)
 
-elif "Attack on Titan" in anime_choice:
-    st.image("https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=60", caption="Attack on Titan")
-    st.write("*សាច់រឿងសង្ខេប៖* ការប្រយុទ្ធគ្នារវាងមនុស្ស និងសត្វទីតាំងយក្ស។")
-    st.video("https://www.youtube.com/watch?v=M_OauHnAFc8")
+    st.markdown("---")
+    st.subheader(f" đangចាក់បញ្ចាំង៖ {selected_anime}")
 
-else:
-    st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60", caption="One Piece")
-    st.write("*សាច់រឿងសង្ខេប៖* ការផ្សងព្រេងរបស់ Luffy ដើម្បីស្វែងរកកត្ដាសមុទ្រ One Piece។")
-    st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-
+    # កូដបង្ហាញវីដេអូនិងសាច់រឿងតាមរឿងនីមួយៗ
+    if "Jujutsu Kaisen" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ពិភពលោកពោរពេញដោយបណ្តាសា និងសិស្សសាលាអប្សរ Yuji Itadori។")
+        st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
+    elif "Demon Slayer" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ការដំណើរកំចាត់បិសាចដើម្បីសង្គ្រោះប្អូនស្រីរបស់ Tanjiro។")
+        st.video("https://www.youtube.com/watch?v=VQ6lftbvCB4")
+    elif "Attack on Titan" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ការប្រយុទ្ធគ្នារវាងមនុស្ស និងទីតាំងយក្សដើម្បីស្វែងរកសេរីភាព។")
+        st.video("https://www.youtube.com/watch?v=M_OauHnAFc8")
+    elif "One Piece" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ការផ្សងព្រេងរបស់ Luffy និងបក្សពួកដើម្បីក្លាយជាស្តេចចោរសមុទ្រ។")
+        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
+    elif "Naruto" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ក្មេងប្រុសបំរុងក្លាយជា Hokage ដ៏អស្ចារ្យក្នុងភូមិលាក់ខ្លួន។")
+        st.video("https://www.youtube.com/watch?v=-G9BqkgZXRA")
+    elif "Dragon Ball Z" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ការការពារផែនដីពីពួកសត្រូវខ្លាំងៗរបស់ Goku និងមិត្តភ័ក្តិ។")
+        st.video("https://www.youtube.com/watch?v=cc4p07k6C0w")
+    elif "My Hero Academia" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ពិភពលោកដែលមនុស្សមានថាមពលពិសេស (Quirk) និងសាលាហ្វឹកហ្វឺនវីរបុរស។")
+        st.video("https://www.youtube.com/watch?v=EP_W91hUGSU")
+    elif "Chainsaw Man" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Denji ដែលមានកម្លាំងបិសាចរណារយន្ត រស់ក្នុងជីវិតដ៏លំបាក។")
+        st.video("https://www.youtube.com/watch?v=j9SgTNzIwwI")
+    elif "Spy x Family" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ភ្នាក់ងារសម្ងាត់បង្កើតគ្រួសារក្លែងក្លាយ ដែលមានប្រពន្ធជាឃាតក និងកូនស្រីចេះអានចិត្ត។")
+        st.video("https://www.youtube.com/watch?v=cck_spzx-VE")
+    elif "Tokyo Revengers" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Takemichi ធ្វើដំណើរឆ្លងពេលវេលាទៅអតីតកាលដើម្បីសង្គ្រោះសង្សារ។")
+        st.video("https://www.youtube.com/watch?v=7M7o3m9j2s8")
+    elif "Hunter x Hunter" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Gon ដើរតាមគន្លងឪពុកដើម្បីប្រឡងជា Hunter ដ៏ពូកែ។")
+        st.video("https://www.youtube.com/watch?v=d6kUnGhDmGE")
+    elif "Bleach" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Ichigo ក្លាយជា Shinigami (ยมរាជ) ដើម្បីការពារមនុស្សលោកពីបិសាច Hollow។")
+        st.video("https://www.youtube.com/watch?v=1u44h0i_D88")
+    elif "Death Note" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Light Yagami រើសបានសៀវភៅមរណៈហើយប្រើវាដើម្បីជម្រះឧក្រិដ្ឋជន។")
+        st.video("https://www.youtube.com/watch?v=NlJZ-Ygsh_A")
+    elif "Fullmetal Alchemist" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* បងប្អូន Elric ប្រើវិជ្ជា alchemy ដើម្បីស្វែងរកតួខ្លួនវិញ។")
+        st.video("https://www.youtube.com/watch?v=tdb0oE6Vn8U")
+    elif "Steins;Gate" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ក្រុមអ្នកវិទ្យាសាស្ត្របង្កើតម៉ាស៊ីនផ្ញើសារទៅអតីតកាលដោយចៃដន្យ។")
+        st.video("https://www.youtube.com/watch?v=27OZlohUzrM")
+    elif "Solo Leveling" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* Sung Jin-woo ក្លាយជា Hunter ដែលមានប្រព័ន្ធ System កើនកម្រិតអស្ចារ្យ។")
+        st.video("https://www.youtube.com/watch?v=W0l_V6Zz4XQ")
+    elif "Haikyuu" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* ការតស៊ូក្នុងកីឡាបាល់ទះថ្នាក់វិទ្យាល័យរបស់ Hinata និង Kageyama។")
+        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
+    elif "Blue Lock" in selected_anime:
+        st.write("", "កម្មវិធីប្រកួតប្រជែងជ្រើសរើសកីឡាករបាល់ទះ/បាល់ទាត់ដ៏តឹងរឹងបំផុត។")
+        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
+    elif "Vinland Saga" in selected_anime:
+        st.write("*សាច់រឿងសង្ខេប៖* រឿងរ៉ាវប្រវត្តិសាស្ត្ររបស់ពួក Viking និងការសងសឹក។")
+        st.video("https://www.youtube.com/watch?v=hO3z3hU11b4")
+    else:
+        st.write("*សាច់រឿងសង្ខេប៖* ជីវិតរស់នៅ និងការប្រយុទ្ធគ្នាក្នុងទីក្រុងអនាគត Night City។")
+        st.video("https://www.youtube.com/watch?v=JtqIas3bYhg")
