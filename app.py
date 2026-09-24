@@ -543,3 +543,58 @@ if menu == "🎬 Anime Streaming Center":
     else:
         st.write("*សាច់រឿងសង្ខេប៖* ជីវិតរស់នៅ និងការប្រយុទ្ធគ្នាក្នុងទីក្រុងអនាគត Night City។")
         st.video("https://www.youtube.com/watch?v=JtqIas3bYhg")
+import streamlit as st
+import openai
+import google.generativeai as genai
+
+# -------------------------------------------------------------------------
+# មុខងារ Multi-AI Chat Center (ChatGPT & Gemini)
+# -------------------------------------------------------------------------
+st.markdown("---")
+st.subheader("🤖 Multi-AI Chat Assistant (ChatGPT & Gemini)")
+st.write("សួរសំណួរផ្សេងៗទៅកាន់ AI ដែលបងចង់បាននៅកន្លែងតែមួយ។")
+
+# ជ្រើសរើសប្រភេទ AI
+ai_choice = st.selectbox("ជ្រើសរើស AI Model៖", [
+    "✨ Google Gemini",
+    "🟢 ChatGPT (OpenAI)"
+])
+
+# ប្រអប់បញ្ចូល API Key (បងអាចដាក់ជា Key ផ្ទាល់ខ្លួន ឬកូដលាក់)
+if "Gemini" in ai_choice:
+    api_key = st.text_input("បញ្ចូល Google Gemini API Key:", type="password")
+    if api_key:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel('gemini-1.5-flash')
+else:
+    api_key = st.text_input("បញ្ចូល OpenAI (ChatGPT) API Key:", type="password")
+    if api_key:
+        openai.api_key = api_key
+
+# ប្រអប់សួរសំណួរ
+user_prompt = st.text_area("សរសរសំណួរ ឬបញ្ហារបស់បងទីនេះ៖", placeholder="ឧទាហរណ៍៖ តើសេដ្ឋកិច្ចមាសឆ្នាំនេះយ៉ាងម៉េចដែរ?")
+
+if st.button("🚀 បញ្ជូនសំណួរទៅ AI"):
+    if not api_key:
+        st.warning("⚠️ សូមបញ្ចូល API Key ឱ្យបានត្រឹមត្រូវសិន។")
+    elif not user_prompt:
+        st.warning("⚠️ សូមសរសេរសំណួររបស់អ្នកជាមុនសិន។")
+    else:
+        with st.spinner("AI កំពុងគិត និងឆ្លើយតប..."):
+            try:
+                if "Gemini" in ai_choice:
+                    # ហៅប្រើប្រាស់ Gemini API
+                    response = model.generate_content(user_prompt)
+                    st.success("លទ្ធផលពី Google Gemini៖")
+                    st.write(response.text)
+                else:
+                    # ហៅប្រើប្រាស់ ChatGPT API
+                    client = openai.OpenAI(api_key=api_key)
+                    response = client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[{"role": "user", "content": user_prompt}]
+                    )
+                    st.success("លទ្ធផលពី ChatGPT៖")
+                    st.write(response.choices[0].message.content)
+            except Exception as e:
+                st.error(f"មានបញ្ហាក្នុងការភ្ជាប់៖ {e}")
