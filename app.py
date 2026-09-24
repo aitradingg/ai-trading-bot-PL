@@ -441,45 +441,38 @@ def add_pro_features_section():
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
 add_pro_features_section()
 # -------------------------------------------------------------------------
-# មុខងារ Game Top-Up (Free Fire & Mobile Legends) - ដាក់តពីក្រោមគេបង្អស់
+# មុខងារ Anime Streaming Center - ដាក់តពីក្រោមគេបង្អស់
 # -------------------------------------------------------------------------
 st.markdown("---")
-st.subheader("💎 Game Top-Up Center (Free Fire & Mobile Legends)")
-st.write("ប្រព័ន្ធបំពេញពេជ្រហ្គេមស្វ័យប្រវត្តិសម្រាប់អតិថិជន។")
+st.subheader("🎬 Anime Streaming Center")
+st.write("ទស្សនារឿង Anime ល្បីៗ និងពេញនិយមដោយផ្ទាល់ទីនេះ។")
 
-with st.form("game_topup_form_simple"):
-    game_choice = st.selectbox("ជ្រើសរើសហ្គេម៖", [
-        "🔥 Free Fire", 
-        "⚔️ Mobile Legends: Bang Bang (MLBB)"
-    ])
-    
-    player_id = st.text_input("បញ្ចូល Player ID ហ្គេម៖", placeholder="ឧទាហរណ៍៖ 123456789")
-    
-    if "Free Fire" in game_choice:
-        diamond_package = st.selectbox("ជ្រើសរើសកញ្ចប់ពេជ្រ៖", [
-            "100 Diamonds", 
-            "310 Diamonds", 
-            "520 Diamonds", 
-            "1060 Diamonds"
-        ])
-    else:
-        diamond_package = st.selectbox("ជ្រើសរើសកញ្ចប់ពេជ្រ៖", [
-            "86 Diamonds", 
-            "172 Diamonds", 
-            "257 Diamonds", 
-            "706 Diamonds"
-        ])
-        
-    payment_method = st.selectbox("វិធីសាស្ត្រទូទាត់ប្រាក់៖", [
-        "ABA Pay / Bakong", 
-        "ACLEDA Bank", 
-        "Wing Money"
-    ])
-    
-    topup_btn = st.form_submit_button("🛒 បញ្ជាក់ការទិញពេជ្រ (Top-Up Now)")
-    
-    if topup_btn:
-        if player_id:
-            st.success(f"🎉 ការបញ្ជាទិញពេជ្រសម្រាប់ហ្គេម *{game_choice}* (ID: {player_id}) កញ្ចប់ *{diamond_package}* បានទទួលជោគជ័យ! ប្រព័ន្ធកំពុងដំណើរការជូន។")
-        else:
-            st.warning("⚠️ សូមបំពេញ Player ID ឱ្យបានត្រឹមត្រូវសិន។")
+# បញ្ជីរឿង Anime គំរូ (បងអាចប្តូរ Link វីដេអូ ឬរូបភាពតាមចិត្ត)
+anime_choice = st.selectbox("ជ្រើសរើសរឿង Anime៖", [
+    "🔥 Jujutsu Kaisen Season 2", 
+    "⚔️ Demon Slayer: Hashira Training Arc", 
+    "⚡ Attack on Titan: Final Chapters",
+    "🌊 One Piece"
+])
+
+if "Jujutsu Kaisen" in anime_choice:
+    st.image("https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&auto=format&fit=crop&q=60", caption="Jujutsu Kaisen")
+    st.write("*សាច់រឿងសង្ខេប៖* រឿងរ៉ាវរបស់ Yuji Itadori និងមិត្តភ័ក្តិក្នុងពិភពអប្សរ និងបណ្តាសា។")
+    # ទីនេះបងអាចដាក់ Link វីដេអូ YouTube ឬ Video Player របស់ Streamlit
+    st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
+
+elif "Demon Slayer" in anime_choice:
+    st.image("https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=60", caption="Demon Slayer")
+    st.write("*សាច់រឿងសង្ខេប៖* ការដំណើរកំចាត់បិសាចរបស់ Tanjiro ដើម្បីជួយសង្គ្រោះប្អូនស្រី។")
+    st.video("https://www.youtube.com/watch?v=VQ6lftbvCB4")
+
+elif "Attack on Titan" in anime_choice:
+    st.image("https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=60", caption="Attack on Titan")
+    st.write("*សាច់រឿងសង្ខេប៖* ការប្រយុទ្ធគ្នារវាងមនុស្ស និងសត្វទីតាំងយក្ស។")
+    st.video("https://www.youtube.com/watch?v=M_OauHnAFc8")
+
+else:
+    st.image("https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60", caption="One Piece")
+    st.write("*សាច់រឿងសង្ខេប៖* ការផ្សងព្រេងរបស់ Luffy ដើម្បីស្វែងរកកត្ដាសមុទ្រ One Piece។")
+    st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
+
