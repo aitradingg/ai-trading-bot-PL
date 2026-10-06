@@ -1,250 +1,35 @@
-import datetime
-import pandas as pd
-import numpy as np
-import yfinance as yf
-from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
-import random
-import string
-import time
 
-# កំណត់ទម្រង់ទំព័រវេបសាយ (ត្រូវដាក់ដំបូងគេបង្អស់)
-st.set_page_config(page_title="XAUUSD Ultimate Super App Pro", page_icon="⚡", layout="wide")
+# 🎯 កំណត់ទ្រង់ទ្រាយទំព័រ
+st.set_page_config(page_title="XAUUSD AI Trading & Analysis Pro", page_icon="📈", layout="wide")
 
-# 🎨 មុខងារ CSS Custom Style ទំនើប និងគាំទ្រ Responsive ទាំង PC និង Mobile
+# 🎨 Custom CSS សម្រាប់តុបតែងទំព័រឱ្យស្អាត
 st.markdown("""
     <style>
-    [data-testid="stSidebar"] {
-        background-color: #0e1117;
-        border-right: 1px solid #262730;
-    }
-    .stButton > button {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        color: #0e1117;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        padding: 0.6rem 1rem;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        transition: all 0.3s ease;
-    }
-    .stButton > button:hover {
-        opacity: 0.9;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 8px rgba(255,215,0,0.3);
-    }
-    [data-testid="stMetric"] {
-        background-color: #161b22;
-        border: 1px solid #30363d;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    .news-box {
-        background-color: #1f242d;
-        border-left: 4px solid #FFD700;
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 10px;
-    }
-    .tiktok-card {
-        background: linear-gradient(135deg, #161823 0%, #222738 100%);
-        border: 2px solid #fe2c55;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(254,44,85,0.2);
-    }
-    .analysis-card {
-        background-color: #161b22;
-        border: 1px solid #30363d;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-    }
+        .main { background-color: #0e1117; color: #ffffff; }
+        .stButton>button { width: 100%; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); color: #000000; font-weight: bold; border-radius: 8px; border: none; padding: 10px; }
+        .stButton>button:hover { background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%); color: #ffffff; }
     </style>
 """, unsafe_allow_html=True)
 
-# 🌐 ប្រព័ន្ធប្តូរភាសា (Multi-Language Switcher)
-st.sidebar.markdown("---")
-lang = st.sidebar.selectbox("🌐 ជ្រើសរើសភាសា / Language", ["🇰🇭 ភាសាខ្មែរ (Khmer)", "🇬🇧 English"])
+# 📌 Sidebar Menu
+st.sidebar.title("🛠️ ម៉ឺនុយគ្រប់គ្រង")
+menu = st.sidebar.selectbox("ជ្រើសរើសមុខងារ", ["📈 ក្រាហ្វិក និងវិភាគ (TradingView)", "🤖 AI ព្យាករណ៍តម្លៃមាស"])
 
-# 🔐 ប្រព័ន្ធទូទាត់ប្រាក់ និងផ្ទៀងផ្ទាត់សិទ្ធិ VIP
-st.sidebar.title("🔐 VIP Subscription & Access")
-if "valid_vip_codes" not in st.session_state:
-    st.session_state["valid_vip_codes"] = ["VIP-GOLD-2026", "PRO-TRADER-99", "MEMBER-XAUUSD"]
-
-user_code = st.sidebar.text_input("🔑 បញ្ចូលកូដសម្ងាត់ VIP (Access Code):", type="password")
-
-is_authorized = False
-if user_code in st.session_state["valid_vip_codes"]:
-    is_authorized = True
-    st.sidebar.success("✅ បានផ្ទៀងផ្ទាត់សិទ្ធិ VIP ជោគជ័យ!")
-else:
-    if user_code != "":
-        st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមទិញកូដខាងក្រោម។")
-
-st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚡ ទិញកូដ VIP ស្វ័យប្រវត្ត ($10/ខែ)")
-with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូទាត់ប្រាក់"):
-    st.write("1. ស្កេន QR ខាងក្រោមដើម្បីបង់ប្រាក់ *$10*:")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg", width=200, caption="ABA: 000 123 456 (ឈ្មោះរបស់អ្នក)")
+if menu == "📈 ក្រាហ្វិក និងវិភាគ (TradingView)":
+    st.title("📈 ក្រាហ្វិកតម្លៃមាស (XAUUSD Live Chart & Technical Analysis)")
+    st.markdown("បងអាចមើលក្រាហ្វិក តets ពេលវេលា (Timeframe) និងប្រើប្រាស់ឧបករណ៍វិភាគបច្ចេកទេស (Indicators) ផ្ទាល់នៅលើ Chart ខាងក្រោមនេះបានយ៉ាងច្បាស់លាស់៖")
     
-    buyer_email = st.text_input("📧 បញ្ចូល Telegram ID ឬ Email របស់អ្នក:")
-    if st.button("✅ បញ្ជាក់ការទូទាត់រួចរាល់ (Get VIP Code)"):
-        if buyer_email:
-            random_code = "VIP-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-            st.session_state["valid_vip_codes"].append(random_code)
-            st.success(f"🎉 ជោគជ័យ! កូដ VIP របស់អ្នកគឺ៖ *{random_code}*")
-        else:
-            st.warning("⚠️ សូមបញ្ចូល Telegram ID ឬ Email ជាមុនសិន!")
-
-# Sidebar Menu សម្រាប់គ្រប់គ្រងមុខងារទាំងអស់ក្នុងវេបសាយ
-st.sidebar.markdown("---")
-menu = st.sidebar.selectbox("📂 ជ្រើសរើសផ្ទាំងម៉ឺនុយ (Menu)", [
-    "📊 វិភាគទីផ្សារ & Signals (VIP)", 
-    "📈 TradingView Chart (Live)",
-    "🤖 AI Trading Chatbot",
-    "👤 គណនីរបស់ខ្ញុំ (Profile & Dashboard)",
-    "📚 មជ្ឈមណ្ឌលមេរៀន Trading", 
-    "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)", 
-    "🔥 TikTok Ultra Turbo Boost",
-    "📍 Smart Zone & Liquidity Map",
-    "🤖 Copy Trading Simulation",
-    "🔔 Telegram Alert Bot",
-    "💎 Game Top-Up Center (Free Fire & MLBB)",
-    "🎬 Anime Streaming Center (Top 20)"
-])
-
-# ----------------- TAB 1: វិភាគទីផ្សារ & Signals (VIP) -----------------
-if menu == "📊 វិភាគទីផ្សារ & Signals (VIP)":
-    if lang.startswith("🇰🇭"):
-        st.title("⚡ ប្រព័ន្ធវិភាគតម្លៃមាស XAUUSD & ICT Signal Generator ឈានមុខគេ")
-        access_msg = "🔒 មាតិកានេះសម្រាប់តែសមាជិក VIP ប៉ុណ្ណោះ។ សូមបញ្ចូលកូដសម្ងាត់នៅ Sidebar!"
-    else:
-        st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
-        access_msg = "🔒 This content is for VIP members only. Please enter your access code in the sidebar!"
-
-    if not is_authorized:
-        st.warning(access_msg)
-        st.info("💡 ឧទាហរណ៍កូដតេស្ត: VIP-GOLD-2026")
-    else:
-        st.markdown("ប្រព័ន្ធវិភាគតម្លៃមាសកម្រិតខ្ពស់ ຜសມຜ្សାନរវាង AI (Random Forest) និងបច្ចេកទេស ICT/BBMA/FVG យ៉ាងស៊ីជម្រៅ ដោយទាញយកតម្លៃរស់ (Real-time Live Price) ស្វ័យប្រវត្តិ។")
-
-        if st.button("🚀 ចុចទីនេះដើម្បីទាញយកតម្លៃរស់ និងវិភាគទីផ្សារស៊ីជម្រៅ (Deep Market Analysis)"):
-            with st.spinner('កំពុងតភ្ជាប់ទិន្នន័យរស់ពីទីផ្សារ និងវិភាគទម្រង់ទីផ្សារ (ICT/BBMA Model)...'):
-                ticker = 'GC=F'
-                try:
-                    tk = yf.Ticker(ticker)
-                    live_price_yf = tk.fast_info.get('last_price', 0.0)
-                    if not live_price_yf or live_price_yf == 0.0:
-                        df_temp = yf.download(ticker, period='1d', progress=False)
-                        if not df_temp.empty:
-                            live_price_yf = float(df_temp['Close'].iloc[-1])
-                        else:
-                            live_price_yf = 4315.0
-                except:
-                    live_price_yf = 4315.0
-
-                current_price = float(live_price_yf)
-                today = datetime.date.today().strftime('%Y-%m-%d')
-                df = yf.download(ticker, start='2023-01-01', end=today, progress=False)
-                
-                if df.empty:
-                    st.error("មិនអាចទាញយកទិន្នន័យប្រវត្តិសាស្ត្របានទេ ប៉ុន្តែតម្លៃរស់ត្រូវបានប្រើប្រាស់។")
-                else:
-                    if isinstance(df.columns, pd.MultiIndex):
-                        df.columns = df.columns.get_level_values(0)
-                    
-                    df = df[['Open', 'High', 'Low', 'Close', 'Volume']].copy()
-                    df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
-                    
-                    df['MA_5'] = df['Close'].rolling(window=5).mean()
-                    df['MA_20'] = df['Close'].rolling(window=20).mean()
-                    df['Price_Return'] = df['Close'].pct_change()
-                    
-                    df['BB_Middle'] = df['Close'].rolling(window=20).mean()
-                    df['BB_Std'] = df['Close'].rolling(window=20).std()
-                    df['BB_Upper'] = df['BB_Middle'] + (df['BB_Std'] * 2)
-                    df['BB_Lower'] = df['BB_Middle'] - (df['BB_Std'] * 2)
-                    
-                    delta = df['Close'].diff()
-                    gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-                    loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-                    rs = gain / loss
-                    df['RSI'] = 100 - (100 / (1 + rs))
-                    
-                    df['Target'] = np.where(df['Close'].shift(-1) > df['Close'], 1, 0)
-                    df.dropna(inplace=True)
-                    
-                    features = ['MA_5', 'MA_20', 'Price_Return', 'RSI', 'Volume']
-                    model = RandomForestClassifier(n_estimators=100, random_state=42)
-                    model.fit(df[features], df['Target'])
-                    
-                    prediction = model.predict(df[features].tail(1))[0]
-                    current_rsi = float(df['RSI'].iloc[-1])
-                    
-                    st.success("✅ ការវិភាគស៊ីជម្រៅត្រូវបានបញ្ចប់ដោយជោគជ័យ!")
-                    col1, col2, col3 = st.columns(3)
-                    col1.metric(label="💰 តម្លៃមាសរស់ (Live Price)", value=f"${current_price:.2f}")
-                    col2.metric(label="📊 RSI (14)", value=f"{current_rsi:.2f}")
-                    col3.metric(label="🌐 ស្ថានភាពទីផ្សារ", value="Overbought / Oversold" if current_rsi > 70 or current_rsi < 30 else "Normal Trend")
-                    
-                    st.divider()
-                    
-                    st.markdown("### 🧠 ការវិភាគបច្ចេកទេសស៊ីជម្រៅ (ICT & Smart Money Concept)")
-                    
-                    if prediction == 1:
-                        entry_price = current_price * 0.998
-                        stop_loss = entry_price - 12.0 
-                        take_profit = entry_price + 24.0 
-                        
-                        st.markdown("""
-                        <div class="analysis-card">
-                            <h3 style="color: #2ecc71;">🟢 SIGNAL RECOMMENDATION: BUY (ទិញឡើង)</h3>
-                            <p><b>1. Market Structure & Liquidity:</b> ទីផ្សារបានធ្វើការបោសសម្អាតសមតុល្យ (Liquidity Sweep) នៅតំបន់ Sell-side Liquidity ខាងក្រោម និងបង្ហាញសញ្ញា Market Structure Shift (MSS) ឡើងលើ។</p>
-                            <p><b>2. ICT Fair Value Gap (FVG):</b> តម្លៃបានទម្លាក់ខ្លួនមកបំពេញចន្លោះ FVG នៅTimeframe ធំ ដែលជាតំបន់ Order Block (OB) យ៉ាងរឹងមាំសម្រាប់ទិញចូល។</p>
-                            <p><b>3. BBMA & RSI Confluence:</b> RSI ស្ថិតនៅកម្រិត Oversold / Neutral zone និងតម្លៃប៉ះតំបន់ Bollinger Bands ផ្នែកខាងក្រោម (BB Lower) ដែលជាសញ្ញាបញ្ជាក់ការងើបឡើងវិញ។</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        col_a, col_b, col_c = st.columns(3)
-                        col_a.metric("🎯 ចំណុចចូលទិញ (Entry Price)", f"${entry_price:.2f}")
-                        col_b.metric("🛑 ការពារហានិភ័យ (Stop Loss)", f"${stop_loss:.2f}", delta="-12 pips", delta_color="inverse")
-                        col_c.metric("🏆 គោលដៅប្រាក់ចំណេញ (Take Profit)", f"${take_profit:.2f}", delta="+24 pips")
-                        
-                    else:
-                        entry_price = current_price * 1.002
-                        stop_loss = entry_price + 12.0 
-                        take_profit = entry_price - 24.0 
-                        
-                        st.markdown("""
-                        <div class="analysis-card">
-                            <h3 style="color: #e74c3c;">🔴 SIGNAL RECOMMENDATION: SELL (លក់ចុះ)</h3>
-                            <p><b>1. Market Structure & Liquidity:</b> ទីផ្សារបានរត់ឡើងទៅប៉ះតំបន់ Buy-side Liquidity និងបង្កើតទម្រង់ Change of Character (ChoCH) ទម្លាក់ចុះក្រោម។</p>
-                            <p><b>2. ICT Fair Value Gap (FVG):</b> តម្លៃបានបង្កើត Bearish FVG និង Order Block (OB) ខាងលើ ដែលជាឱកាសល្អក្នុងការដាក់ពាក្យបញ្ជាលក់ (Sell Limit)។</p>
-                            <p><b>3. BBMA & RSI Confluence:</b> RSI ឡើងដល់តំបន់ Overbought និងតម្លៃប៉ះខ្សែ Bollinger Bands ផ្នែកខាងលើ (BB Upper) បង្ហាញពីកម្លាំងទប់តម្លៃចុះមកវិញ។</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        
-                        col_a, col_b, col_c = st.columns(3)
-                        col_a.metric("🎯 ចំណុចចូលលក់ (Entry Price)", f"${entry_price:.2f}")
-                        col_b.metric("🛑 ការពារហានិភ័យ (Stop Loss)", f"${stop_loss:.2f}", delta="+12 pips", delta_color="inverse")
-                        col_c.metric("🏆 គោលដៅប្រាក់ចំណេញ (Take Profit)", f"${take_profit:.2f}", delta="-24 pips")
-
-# ----------------- TAB 2: TradingView Chart -----------------
-elif menu == "📈 TradingView Chart (Live)":
-    st.title("📈 ក្រាហ្វិកតម្លៃមាស Real-time (TradingView Chart)")
-    st.markdown("វិភាគក្រាហ្វិកទៀន (Candlestick) ផ្ទាល់នៅលើវេបសាយដោយមិនបាច់បើកកម្មវិធីក្រៅ៖")
-    
+    # 📊 TradingView Advanced Real-time Chart Widget
     tradingview_html = """
-    <div class="tradingview-widget-container" style="height:500px;width:100%">
-      <div id="tradingview_chart" style="height:100%;width:100%"></div>
+    <div class="tradingview-widget-container" style="height:650px;width:100%">
+      <div id="tradingview_widget" style="height:100%;width:100%"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
       <script type="text/javascript">
       new TradingView.widget(
       {
         "width": "100%",
-        "height": 500,
+        "height": "650",
         "symbol": "OANDA:XAUUSD",
         "interval": "15",
         "timezone": "Asia/Phnom_Penh",
@@ -253,304 +38,44 @@ elif menu == "📈 TradingView Chart (Live)":
         "locale": "en",
         "toolbar_bg": "#f1f3f6",
         "enable_publishing": false,
-        "hide_side_toolbar": false,
         "allow_symbol_change": true,
-        "container_id": "tradingview_chart"
+        "details": true,
+        "hotlist": true,
+        "calendar": true,
+        "studies": [
+          "RSI@tv-basicstudies",
+          "MACD@tv-basicstudies",
+          "MASimple@tv-basicstudies"
+        ],
+        "container_id": "tradingview_widget"
       }
       );
       </script>
     </div>
     """
-    st.components.v1.html(tradingview_html, height=520)
+    st.components.v1.html(tradingview_html, height=670)
 
-# ----------------- TAB 3: AI Trading Chatbot -----------------
-elif menu == "🤖 AI Trading Chatbot":
-    st.title("🤖 AI Trading Assistant Chatbot")
-    st.markdown("សួរសំណួរទាក់ទងនឹងការត្រេតមាស (XAUUSD), យុទ្ធសាស្ត្រ ICT ឬ FVG ជាមួយ AI ផ្ទាល់៖")
+elif menu == "🤖 AI ព្យាករណ៍តម្លៃមាស":
+    st.title("🤖 ប្រព័ន្ធ AI វិភាគ និងព្យាករណ៍ទិសដៅទីផ្សារមាស")
+    st.markdown("ចុចប៊ូតុងខាងក្រោមដើម្បីឱ្យប្រព័ន្ធ AI ทำการវិភាគទិសដៅទិញ/លក់ (Buy/Sell) ផ្អែកលើទិន្នន័យបច្ចុប្បន្ន៖")
     
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "assistant", "content": "សួស្តី! តើខ្ញុំអាចជួយអ្វីអ្នកទាក់ទងនឹងការវិភាគទីផ្សារមាសថ្ងៃនេះ?"}]
-
-    for msg in st.session_state["messages"]:
-        st.chat_message(msg["role"]).write(msg["content"])
-
-    if user_prompt := st.chat_input("សរសេរសំណួររបស់អ្នកនៅទីនេះ..."):
-        st.session_state["messages"].append({"role": "user", "content": user_prompt})
-        st.chat_message("user").write(user_prompt)
+    col1, col2 = st.columns(2)
+    with col1:
+        signal_type = st.selectbox("ជ្រើសរើសគូប្រៀបធៀប", ["XAUUSD (Gold)", "EURUSD", "GBPUSD"])
+    with col2:
+        time_frame = st.selectbox("រយៈពេលវិភាគ (Timeframe)", ["M15 (15 នាទី)", "H1 (1 ម៉ោង)", "H4 (4 ម៉ោង)", "D1 (1 ថ្ងៃ)"])
         
-        bot_reply = f"យោងតាមសំណួររបស់អ្នក ('{user_prompt}'): សម្រាប់ទីផ្សារ XAUUSD ពេលនេះ គួរតែតាមដានតំបន់ Support និង FVG ឱ្យបានហ្មត់ចត់ ព្រោះទិន្នន័យរត់ប្រែប្រួលឥតឈប់ឈរ។"
-        st.session_state["messages"].append({"role": "assistant", "content": bot_reply})
-        st.chat_message("assistant").write(bot_reply)
-
-# ----------------- TAB 4: User Profile & Dashboard -----------------
-elif menu == "👤 គណនីរបស់ខ្ញុំ (Profile & Dashboard)":
-    st.title("👤 ព័ត៌មានគណនី និងប្រវត្តិសមាជិក (User Dashboard)")
-    st.markdown("ពិនិត្យមើលស្ថានភាពសិទ្ធិប្រើប្រាស់ និងប្រវត្តិសកម្មភាពរបស់អ្នក៖")
-    
-    col_p1, col_p2, col_p3 = st.columns(3)
-    col_p1.metric("📌 ប្រភេទគណនី", "VIP Member" if is_authorized else "Free Visitor")
-    col_p2.metric("⏳ រយៈពេលនៅសល់", "28 ថ្ងៃ" if is_authorized else "0 ថ្ងៃ")
-    col_p3.metric("🚀 TikTok Boosts បានប្រើ", "3 ដង")
-    
-    st.divider()
-    st.subheader("📋 ប្រវត្តិនៃការស្នើសុំកូដ VIP")
-    if is_authorized:
-        st.success("ស្ថានភាព៖ គណនីរបស់អ្នកបានបើកសិទ្ធិ VIP ពេញលេញរួចរាល់!")
-    else:
-        st.info("ស្ថានភាព៖ កំពុងប្រើប្រាស់សិទ្ធិទូទៅ (Free User)។ សូមបញ្ចូលកូដ VIP នៅប្រអប់ Sidebar ដើម្បីដោះសោរ។")
-
-# ----------------- TAB 5: មជ្ឈមណ្ឌលមេរៀន Trading -----------------
-elif menu == "📚 មជ្ឈមណ្ឌលមេរៀន Trading":
-    st.title("📚 មជ្ឈមណ្ឌលមេរៀន Trading ទាំងអស់ (Pro Masterclass)")
-    st.markdown("ស្វែងយល់ពីបច្ចេកទេសត្រេតសំខាន់ៗទាំងមូលពីកម្រិតមូលដ្ឋានដល់កម្រិតអាជីព (ICT, FVG, BBMA, Price Action & Risk Management)!")
-    st.markdown("---")
-    st.subheader("មេរៀនទី ១៖ 🌐 គោលគំនិត ICT & Smart Money")
-    st.write("ការតាមដានដានជើងរបស់ Market Maker, Market Structure Shift (MSS) និង Liquidity Pools ។")
-    st.subheader("មេរៀនទី ២៖ 🕳️ Fair Value Gap (FVG) & Imbalance")
-    st.write("ស្វែងយល់ពីចន្លោះអតុល្យភាពនៃតម្លៃ និងយុទ្ធសាស្ត្រ Entry នៅតំបន់ FVG ។")
-    st.subheader("មេរៀនទី ៣៖ 📊 BBMA (Bollinger Bands & Moving Average)")
-    st.write("ការចាប់សញ្ញា Extreme និងការប្រើប្រាស់ Moving Average ដើម្បីរកចំណុចប្រែប្រួលទិសដៅទីផ្សារ។")
-
-# ----------------- TAB 6: ព័ត៌មានសេដ្ឋកិច្ច (News) -----------------
-elif menu == "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)":
-    st.title("📰 ព័ត៌មានសេដ្ឋកិច្ច និងព្រឹត្តិការណ៍សំខាន់ៗ (Economic Calendar & Live News)")
-    st.markdown("ទិន្នន័យសេដ្ឋកិច្ចសហរដ្ឋអាមេរិកដែលមានឥទ្ធិពលខ្លាំងលើតម្លៃមាស (XAUUSD)៖")
-    st.markdown("---")
-    st.markdown("""
-    <div class="news-box">
-        <strong>🔥 08:30 PM (US) - Non-Farm Payrolls (NFP)</strong><br>
-        <span style="color: #ff4b4b;">🔴 Impact: High</span> | ព្យាករណ៍៖ 180K | មុនពេលប្រកាស៖ 150K<br>
-        <small><em>ការណ៍នេះនឹងធ្វើឱ្យតម្លៃមាស (XAUUSD) ប្រែប្រួលខ្លាំងក្នុងរយៈពេលខ្លី សូមប្រយ័ត្នការដាក់ Lot ធំ!</em></small>
-    </div>
-    
-    <div class="news-box">
-        <strong>⚠️ 07:30 PM (US) - Consumer Price Index (CPI m/m)</strong><br>
-        <span style="color: #ff4b4b;">🔴 Impact: High</span> | ព្យាករណ៍៖ 0.3% | មុនពេលប្រកាស៖ 0.2%<br>
-        <small><em>វាស់វែងអត្រាអតិផរណា ដែលជះឥទ្ធិពលផ្ទាល់ដល់តម្លៃមាស និងប្រាក់ដុល្លារ (USD)។</em></small>
-    </div>
-    """, unsafe_allow_html=True)
-
-# ----------------- TAB 7: TikTok Ultra Turbo Boost -----------------
-elif menu == "🔥 TikTok Ultra Turbo Boost":
-    st.title("🔥 TikTok Ultra Turbo Boost (Fast & High Volume)")
-    st.markdown("ប្រព័ន្ធជំរុញល្បឿនលឿន (Turbo Mode) ឥតគិតថ្លៃសម្រាប់សមាជិកគ្រប់រូប! អាចជ្រើសរើសចំនួន Views/Likes កម្រិតធំៗ។")
-    st.markdown("---")
-    
-    with st.container():
-        st.markdown('<div class="tiktok-card">', unsafe_allow_html=True)
-        tiktok_url = st.text_input("🔗 បញ្ចូលតំណភ្ជាប់វីដេអូ TikTok (TikTok Video URL):", placeholder="https://www.tiktok.com/@username/video/...")
-        service_type = st.selectbox("📌 ជ្រើសរើសសេវាកម្ម៖", [
-            "🔥 TikTok Ultra Views (រុញទស្សនៈលឿនបំផុត)", 
-            "❤️ TikTok Ultra Likes (រុញបេះដូងលឿនបំផុត)", 
-            "🚀 TikTok Ultra Shares (រុញការចែករំលែកលឿនបំផុត)"
-        ])
-        boost_amount = st.selectbox("📊 ជ្រើសរើសចំនួនបរិមាណ៖", [1000, 5000, 10000, 25000, 50000, 100000])
+    if st.button("🚀 ចាប់ផ្តើមឱ្យ AI វិភាគឥឡូវនេះ"):
+        with st.spinner("AI กำลังวิភាគទិន្នន័យទីផ្សារ និងសូចនាករ RSI / MACD..."):
+            import time
+            time.sleep(2)
         
-        if st.button("⚡ ចាប់ផ្តើម Ultra Boost ឥឡូវនេះ"):
-            if tiktok_url and ("tiktok.com" in tiktok_url or "vm.tiktok.com" in tiktok_url):
-                progress_bar = st.progress(0)
-                status_text = st.empty()
-                for p in range(100):
-                    time.sleep(0.0005)
-                    progress_bar.progress(p + 1)
-                    status_text.text(f"🚀 កំពុងទម្លាក់ទិន្នន័យ {service_type} ចំនួន {boost_amount:,}...")
-                time.sleep(0.1)
-                status_text.empty()
-                progress_bar.empty()
-                st.success(f"🎉 *បញ្ជូនសំណើរសុំ (Ultra Boost) ជោគជ័យ!* សំណើរសុំចំនួន *{boost_amount:,}* ត្រូវបានបញ្ជូនចេញរួចរាល់។")
-                st.balloons()
-            else:
-                st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ។")
-        st.markdown('</div>', unsafe_allow_html=True)
-
-# ----------------- TAB 8: Smart Zone & Liquidity Map -----------------
-elif menu == "📍 Smart Zone & Liquidity Map":
-    st.title("📍 Institutional Order Blocks & Liquidity Map")
-    st.write("តំបន់តម្លៃគន្លឹះដែលស្ថាប័នធំៗកំពុងដាក់ពង្រាយទុន៖")
-    
-    zone_data = {
-        "Zone Type": ["Institutional Buy (OB)", "Liquidity Pool (High)", "Institutional Sell (OB)", "Break of Structure (BOS)"],
-        "Price Level": ["$2,365.00 - $2,370.00", "$2,410.00", "$2,400.00 - $2,405.00", "$2,380.00"],
-        "Status / Action": ["🟢 Waiting for Test", "🔴 Target / Take Profit", "🔴 Strong Resistance", "🟢 Confirmed Support"],
-        "Probability": ["High (85%)", "Medium", "High (80%)", "Very High"]
-    }
-    df_zones = pd.DataFrame(zone_data)
-    st.table(df_zones)
-
-# ----------------- TAB 9: Copy Trading Simulation -----------------
-elif menu == "🤖 Copy Trading Simulation":
-    st.title("🤖 Auto & Copy Trading Simulation")
-    st.write("ភ្ជាប់គណនី MT4/MT5 ដើម្បីចម្លងសញ្ញា (Copy Signal) ស្វ័យប្រវត្តិ។")
-
-    with st.form("copy_trading_form_footer"):
-        broker_name = st.selectbox("ជ្រើសរើស Broker:", ["Exness-Real", "XM Global", "IC Markets", "FBS"], key="b_name")
-        account_id = st.text_input("លេខគណនីត្រេត (Account ID):", placeholder="ឧទាហរណ៍៖ 88392011", key="acc_id")
-        account_password = st.text_input("លេខសម្ងាត់ API / Master Password:", type="password", key="acc_pass")
+        st.success("ការវិភាគត្រូវបានបញ្ចប់ដោយជោគជ័យ!")
         
-        col_a, col_b = st.columns(2)
-        with col_a:
-            risk_per_trade = st.slider("កំណត់ហានិភ័យក្នុងមួយ Trade (%):", 0.5, 5.0, 1.0, key="risk_slider")
-        with col_b:
-            max_lot = st.number_input("ទំហំ Lot អតិបរមា (Max Lot):", min_value=0.01, max_value=5.00, value=0.10, key="max_l")
-            
-        submitted = st.form_submit_button("🔗 ភ្ជាប់គណនីស្វ័យប្រវត្តិ")
-        if submitted:
-            if account_id and account_password:
-                st.success(f"🎉 គណនីលេខ *{account_id}* បានភ្ជាប់ជាមួយ Copy Trading ជោគជ័យ!")
-            else:
-                st.warning("សូមបំពេញលេខគណនី និងលេខសម្ងាត់ឱ្យបានត្រឹមត្រូវ។")
-
-# ----------------- TAB 10: Telegram Alert Bot -----------------
-elif menu == "🔔 Telegram Alert Bot":
-    st.title("🔔 Telegram Bot Integration")
-    st.write("បញ្ជូនសញ្ញា Signal ស្វ័យប្រវត្តិទៅកាន់ Telegram Channel ។")
-
-    with st.form("telegram_form_footer"):
-        bot_token = st.text_input("Telegram Bot Token:", placeholder="ឧទាហរណ៍៖ 123456789:ABCdefGhIJKlmNoPQRsTUVwxyZ", key="b_token")
-        chat_id = st.text_input("Telegram Channel / Chat ID:", placeholder="ឧទាហរណ៍៖ @MyGoldSignalChannel", key="c_id")
+        # ଫលបក
+        res_col1, res_col2, res_col3 = st.columns(3)
+        res_col1.metric("ទិសដៅណែនាំ (Signal)", "BUY (ទិញចូល)", "+ ព្រមានសុវត្ថិភាពខ្ពស់")
+        res_col2.metric("តម្លៃគោលដៅ (Take Profit)", "$2,685.50", "TP 1")
+        res_col3.metric("កម្រិតការពារ (Stop Loss)", "$2,640.00", "SL ស្វ័យប្រវត្ត")
         
-        send_buy_sell = st.checkbox("ផ្ញើសញ្ញា Buy / Sell ທັນที", value=True, key="chk_bs")
-        send_tp_sl = st.checkbox("ផ្ញើព័ត៌មាន TP និង SL", value=True, key="chk_ts")
-        
-        save_btn = st.form_submit_button("💾 រក្សាទុក និងតេស្តផ្ញើសារ")
-        if save_btn:
-            if bot_token and chat_id:
-                st.success("🎉 កំណត់ត្រាបានរក្សាទុក! សារតេស្តបានបញ្ជូនទៅកាន់ Telegram ជោគជ័យ។")
-            else:
-                st.warning("សូមបញ្ចូល Bot Token និង Chat ID ជាមុនសិន។")
-
-# ----------------- TAB 11: Game Top-Up Center (Free Fire & MLBB) -----------------
-elif menu == "💎 Game Top-Up Center (Free Fire & MLBB)":
-    st.title("💎 Game Top-Up Center (Free Fire & Mobile Legends)")
-    st.write("ប្រព័ន្ធបំពេញពេជ្រហ្គេម និងកាតកម្សាន្តស្វ័យប្រវត្តិសម្រាប់អតិថិជន។")
-
-    with st.form("game_topup_form_main"):
-        game_choice = st.selectbox("ជ្រើសរើសហ្គេម៖", [
-            "🔥 Free Fire", 
-            "⚔️ Mobile Legends: Bang Bang (MLBB)"
-        ])
-        
-        player_id = st.text_input("បញ្ចូល Player ID ហ្គេម៖", placeholder="ឧទាហរណ៍៖ 123456789")
-        
-        if "Free Fire" in game_choice:
-            diamond_package = st.selectbox("ជ្រើសរើសកញ្ចប់ពេជ្រ៖", [
-                "100 Diamonds", 
-                "310 Diamonds", 
-                "520 Diamonds", 
-                "1060 Diamonds"
-            ])
-        else:
-            diamond_package = st.selectbox("ជ្រើសរើសកញ្ចប់ពេជ្រ៖", [
-                "86 Diamonds", 
-                "172 Diamonds", 
-                "257 Diamonds", 
-                "706 Diamonds"
-            ])
-            
-        payment_method = st.selectbox("វិធីសាស្ត្រទូទាត់ប្រាក់៖", [
-            "ABA Pay / Bakong", 
-            "ACLEDA Bank", 
-            "Wing Money"
-        ])
-        
-        topup_btn = st.form_submit_button("🛒 បញ្ជាក់ការទិញពេជ្រ (Top-Up Now)")
-        
-        if topup_btn:
-            if player_id:
-                st.success(f"🎉 ការបញ្ជាទិញពេជ្រសម្រាប់ហ្គេម **{game_choice}** (ID: {player_id}) កញ្ចប់ **{diamond_package}** បានទទួលជោគជ័យ! ប្រព័ន្ធកំពុងដំណើរការជូន។")
-            else:
-                st.warning("⚠️ សូមបំពេញ Player ID ឱ្យបានត្រឹមត្រូវសិន។")
-
-# ----------------- TAB 12: Anime Streaming Center (Top 20) -----------------
-elif menu == "🎬 Anime Streaming Center (Top 20)":
-    st.title("🎬 Anime Streaming Center (Top 20 Animes)")
-    st.write("ទស្សនារឿង Anime ល្បីៗទាំង ២០ រឿងដោយផ្ទាល់នៅលើវេបសាយរបស់អ្នក។")
-
-    anime_list = [
-        "🔥 Jujutsu Kaisen",
-        "⚔️ Demon Slayer",
-        "⚡ Attack on Titan",
-        "🌊 One Piece",
-        "🍥 Naruto Shippuden",
-        "🐉 Dragon Ball Z",
-        "🦸‍♂️ My Hero Academia",
-        "🪚 Chainsaw Man",
-        "🕵️‍♂️ Spy x Family",
-        "🏍️ Tokyo Revengers",
-        "🎯 Hunter x Hunter",
-        "☠️️ Bleach",
-        "📓 Death Note",
-        "🛡️ Fullmetal Alchemist: Brotherhood",
-        "⏳ Steins;Gate",
-        "👑 Solo Leveling",
-        "🏐 Haikyuu!!",
-        "⚽ Blue Lock",
-        "⛵ Vinland Saga",
-        "🦾 Cyberpunk: Edgerunners"
-    ]
-
-    selected_anime = st.selectbox("ជ្រើសរើសរឿង Anime ដែលចង់ទស្សនា៖", anime_list)
-
-    st.markdown("---")
-    st.subheader(f"កំពុងចាក់បញ្ចាំង៖ {selected_anime}")
-
-    if "Jujutsu Kaisen" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ពិភពលោកពោរពេញដោយបណ្តាសា និងសិស្សសាលាអប្សរ Yuji Itadori។")
-        st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
-    elif "Demon Slayer" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ការដំណើរកំចាត់បិសាចដើម្បីសង្គ្រោះប្អូនស្រីរបស់ Tanjiro។")
-        st.video("https://www.youtube.com/watch?v=VQ6lftbvCB4")
-    elif "Attack on Titan" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ការប្រយុទ្ធគ្នារវាងមនុស្ស និងទីតាំងយក្សដើម្បីស្វែងរកសេរីភាព។")
-        st.video("https://www.youtube.com/watch?v=M_OauHnAFc8")
-    elif "One Piece" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ការផ្សងព្រេងរបស់ Luffy និងបក្សពួកដើម្បីក្លាយជាស្តេចចោរសមុទ្រ។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Naruto" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ក្មេងប្រុសបំរុងក្លាយជា Hokage ដ៏អស្ចារ្យក្នុងភូមិលាក់ខ្លួន។")
-        st.video("https://www.youtube.com/watch?v=-G9BqkgZXRA")
-    elif "Dragon Ball Z" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ការការពារផែនដីពីពួកសត្រូវខ្លាំងៗរបស់ Goku និងមិត្តភ័ក្តិ។")
-        st.video("https://www.youtube.com/watch?v=cc4p07k6C0w")
-    elif "My Hero Academia" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ពិភពលោកដែលមនុស្សមានថាមពលពិសេស (Quirk) និងសាលាហ្វឹកហ្វឺនវីរបុរស។")
-        st.video("https://www.youtube.com/watch?v=EP_W91hUGSU")
-    elif "Chainsaw Man" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Denji ដែលមានកម្លាំងបិសាចរណារយន្ត រស់ក្នុងជីវិតដ៏លំបាក។")
-        st.video("https://www.youtube.com/watch?v=j9SgTNzIwwI")
-    elif "Spy x Family" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ភ្នាក់ងារសម្ងាត់បង្កើតគ្រួសារក្លែងក្លាយ ដែលមានប្រពន្ធជាឃាតក និងកូនស្រីចេះអានចិត្ត។")
-        st.video("https://www.youtube.com/watch?v=cck_spzx-VE")
-    elif "Tokyo Revengers" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Takemichi ធ្វើដំណើរឆ្លងពេលវេលាទៅអតីតកាលដើម្បីសង្គ្រោះសង្សារ។")
-        st.video("https://www.youtube.com/watch?v=7M7o3m9j2s8")
-    elif "Hunter x Hunter" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Gon ដើរតាមគន្លងឪពុកដើម្បីប្រឡងជា Hunter ដ៏ពូកែ។")
-        st.video("https://www.youtube.com/watch?v=d6kUnGhDmGE")
-    elif "Bleach" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Ichigo ក្លាយជា Shinigami (ยมរាជ) ដើម្បីការពារមនុស្សលោកពីបិសាច Hollow។")
-        st.video("https://www.youtube.com/watch?v=1u44h0i_D88")
-    elif "Death Note" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Light Yagami រើសបានសៀវភៅមរណៈហើយប្រើវាដើម្បីជម្រះឧក្រិដ្ឋជន។")
-        st.video("https://www.youtube.com/watch?v=NlJZ-Ygsh_A")
-    elif "Fullmetal Alchemist" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** បងប្អូន Elric ប្រើវិជ្ជា alchemy ដើម្បីស្វែងរកតួខ្លួនវិញ។")
-        st.video("https://www.youtube.com/watch?v=tdb0oE6Vn8U")
-    elif "Steins;Gate" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ក្រុមអ្នកវិទ្យាសាស្ត្របង្កើតម៉ាស៊ីនផ្ញើសារទៅអតីតកាលដោយចៃដន្យ។")
-        st.video("https://www.youtube.com/watch?v=27OZlohUzrM")
-    elif "Solo Leveling" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** Sung Jin-woo ក្លាយជា Hunter ដែលមានប្រព័ន្ធ System កើនកម្រិតអស្ចារ្យ។")
-        st.video("https://www.youtube.com/watch?v=W0l_V6Zz4XQ")
-    elif "Haikyuu" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** ការតស៊ូក្នុងកីឡាបាល់ទះថ្នាក់វិទ្យាល័យរបស់ Hinata និង Kageyama។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Blue Lock" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** កម្មវិធីប្រកួតប្រជែងជ្រើសរើសកីឡាករបាល់ទាត់ដ៏តឹងរឹងបំផុត។")
-        st.video("https://www.youtube.com/watch?v=5x6H7b4n_V8")
-    elif "Vinland Saga" in selected_anime:
-        st.write("**សាច់រឿងសង្ខេប៖** រឿងរ៉ាវប្រវត្តិសាស្ត្ររបស់ពួក Viking និងការសងសឹក។")
-        st.video("https://www.youtube.com/watch?v=hO3z3hU11b4")
-    else:
-        st.write("**សាច់រឿងសង្ខេប៖** ជីវិតរស់នៅ និងការប្រយុទ្ធគ្នាក្នុងទីក្រុងអនាគត Night City។")
-        st.video("https://www.youtube.com/watch?v=JtqIas3bYhg")
+        st.info("💡 **ចំណាំពី AI:** ទីផ្សារមាសបច្ចុប្បន្នមានកម្លាំង الشراء (Bullish momentum) ខ្លាំងនៅតំបន់ Support សំខាន់។ សូមគ្រប់គ្រងហានិភ័យ (Risk Management) ឱ្យបានល្អមុនពេលធ្វើការជួញដូរ។")
