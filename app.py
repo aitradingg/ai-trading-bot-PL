@@ -1,4 +1,4 @@
- import datetime
+import datetime
 import pandas as pd
 import numpy as np
 import yfinance as yf
@@ -439,4 +439,4 @@ def add_pro_features_section():
                     st.warning("សូមបញ្ចូល Bot Token និង Chat ID ជាមុនសិន។")
 
 # ហៅមុខងារនេះឱ្យបង្ហាញនៅខាងក្រោមគេបង្អស់
-add_pro_features_section()
+add_pro_features_sectio()
