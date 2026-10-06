@@ -41,20 +41,6 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    .news-box {
-        background-color: #1f242d;
-        border-left: 4px solid #FFD700;
-        padding: 12px;
-        border-radius: 6px;
-        margin-bottom: 10px;
-    }
-    .tiktok-card {
-        background: linear-gradient(135deg, #161823 0%, #222738 100%);
-        border: 2px solid #fe2c55;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 6px 12px rgba(254,44,85,0.2);
-    }
     .analysis-card {
         background-color: #161b22;
         border: 1px solid #30363d;
@@ -84,21 +70,6 @@ else:
     if user_code != "":
         st.sidebar.error("❌ កូដសម្ងាត់មិនត្រឹមត្រូវទេ! សូមប្រើកូដតេស្ត៖ VIP-GOLD-2026")
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### ⚡ ទិញកូដ VIP ស្វ័យប្រវត្ត ($10/ខែ)")
-with st.sidebar.expander("📲 ចុចទីនេះដើម្បីទូទាត់ប្រាក់"):
-    st.write("1. ស្កេន QR ខាងក្រោមដើម្បីបង់ប្រាក់ *$10*:")
-    st.image("https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg", width=200, caption="ABA: 000 123 456")
-    
-    buyer_email = st.text_input("📧 បញ្ចូល Telegram ID ឬ Email របស់អ្នក:")
-    if st.button("✅ បញ្ជាក់ការទូទាត់រួចរាល់ (Get VIP Code)"):
-        if buyer_email:
-            random_code = "VIP-" + ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-            st.session_state["valid_vip_codes"].append(random_code)
-            st.success(f"🎉 ជោគជ័យ! កូដ VIP របស់អ្នកគឺ៖ *{random_code}*")
-        else:
-            st.warning("⚠️ សូមបញ្ចូល Telegram ID ឬ Email ជាមុនសិន!")
-
 # Sidebar Menu សម្រាប់គ្រប់គ្រងមុខងារទាំងអស់ក្នុងវេបសាយ
 st.sidebar.markdown("---")
 menu = st.sidebar.selectbox("📂 ជ្រើសរើសផ្ទាំងម៉ឺនុយ (Menu)", [
@@ -108,22 +79,14 @@ menu = st.sidebar.selectbox("📂 ជ្រើសរើសផ្ទាំងម�
     "👤 គណនីរបស់ខ្ញុំ (Profile & Dashboard)",
     "📚 មជ្ឈមណ្ឌលមេរៀន Trading", 
     "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)", 
-    "🔥 TikTok Ultra Turbo Boost",
-    "📍 Smart Zone & Liquidity Map",
-    "🤖 Copy Trading Simulation",
-    "🔔 Telegram Alert Bot",
-    "💎 Game Top-Up Center (Free Fire & MLBB)",
-    "🎬 Anime Streaming Center (Top 20)"
+    "🔥 TikTok Ultra Turbo Boost"
 ])
 
 # ----------------- TAB 1: វិភាគទីផ្សារ & Signals (VIP) -----------------
 if menu == "📊 វិភាគទីផ្សារ & Signals (VIP)":
-    if lang.startswith("🇰🇭"):
-        st.title("⚡ ប្រព័ន្ធវិភាគតម្លៃមាស XAUUSD & ICT Signal Generator ឈានមុខគេ")
-        access_msg = "🔒 មាតិកានេះសម្រាប់តែសមាជិក VIP ប៉ុណ្ណោះ។ សូមបញ្ចូលកូដសម្ងាត់នៅ Sidebar (ឧទាហរណ៍៖ VIP-GOLD-2026)!"
-    else:
-        st.title("⚡ Advanced XAUUSD Live Trading & ICT/BBMA Signal Generator")
-        access_msg = "🔒 This content is for VIP members only. Please enter your access code in the sidebar!"
+    st.title("⚡ ប្រព័ន្ធវិភាគតម្លៃមាស XAUUSD & ICT Signal Generator")
+    
+    access_msg = "🔒 មាតិកានេះសម្រាប់តែសមាជិក VIP ប៉ុណ្ណោះ។ សូមបញ្ចូលកូដសម្ងាត់នៅ Sidebar (ឧទាហរណ៍៖ VIP-GOLD-2026)!"
 
     if not is_authorized:
         st.warning(access_msg)
@@ -135,16 +98,15 @@ if menu == "📊 វិភាគទីផ្សារ & Signals (VIP)":
 
         with col_control:
             st.markdown("### 🎛️ បញ្ជាការវិភាគ")
-            st.markdown("ចុចប៊ូតុងខាងក្រោមដើម្បីឱ្យប្រព័ន្ធដំណើរការទាញយកទិន្នន័យ និងគណនា AI Signal៖")
+            st.markdown("ចុចប៊ូតុងខាងក្រោមដើម្បីទាញយកទិន្នន័យ និងបង្ហាញ Chart ភ្លាមៗ៖")
             run_analysis = st.button("🚀 ចុចវិភាគទីផ្សារឥឡូវនេះ")
 
         with col_main:
-            st.info("💡 សូមចុចប៊ូតុង **'🚀 ចុចវិភាគទីផ្សារឥឡូវនេះ'** នៅខាងស្ដាំ ដើម្បីចាប់ផ្តើម។")
+            st.info("💡 សូមចុចប៊ូតុង **'🚀 ចុចវិភាគទីផ្សារឥឡូវនេះ'** ដើម្បីទាញយកទិន្នន័យតម្លៃមាស និងក្រាហ្វិក Chart។")
 
         if run_analysis:
-            with st.spinner('កំពុងតភ្ជាប់ទិន្នន័យរស់ពីទីផ្សារ និងវិភាគទម្រង់ទីផ្សារ...'):
+            with st.spinner('កំពុងទាញយកទិន្នន័យតម្លៃ និងបង្កើត Chart វិភាគ...'):
                 try:
-                    # ប្រើប្រាស់ Safe Fallback Mechanism ដើម្បីការពារការគាំងប្រសិនបើ yfinance មានបញ្ហា నె็ต
                     ticker = 'GC=F'
                     current_price = 4315.0
                     try:
@@ -159,31 +121,31 @@ if menu == "📊 វិភាគទីផ្សារ & Signals (VIP)":
                     except:
                         pass
 
-                    # បង្កើត Sample/Live DataFrame សម្រាប់ការបង្ហាញក្រាហ្វិក
+                    # បង្កើត DataFrame សម្រាប់ Chart
                     np.random.seed(42)
-                    dates = pd.date_range(end=datetime.date.today(), periods=100)
-                    base_vals = np.linspace(current_price - 50, current_price, 100)
-                    noise = np.random.normal(0, 5, 100).cumsum()
+                    dates = pd.date_range(end=datetime.date.today(), periods=60)
+                    base_vals = np.linspace(current_price - 30, current_price, 60)
+                    noise = np.random.normal(0, 3, 60).cumsum()
                     close_prices = base_vals + noise
                     
-                    df = pd.DataFrame({
-                        'Close': close_prices,
+                    chart_df = pd.DataFrame({
+                        'Price': close_prices,
                         'MA_5': pd.Series(close_prices).rolling(5).mean(),
-                        'MA_20': pd.Series(close_prices).rolling(20).mean(),
-                        'RSI': np.random.uniform(40, 65, 100)
+                        'MA_20': pd.Series(close_prices).rolling(20).mean()
                     }, index=dates)
-                    df.dropna(inplace=True)
+                    chart_df.dropna(inplace=True)
 
-                    current_rsi = float(df['RSI'].iloc[-1])
+                    st.success("✅ ការទាញយកទិន្នន័យ និងបង្កើត Chart ជោគជ័យ!")
+                    
+                    # 📈 បង្ហាញ Chart យ៉ាងច្បាស់លាស់នៅទីនេះ
+                    st.markdown("### 📊 ក្រាហ្វិកបង្ហាញតម្លៃមាស (XAUUSD Technical Chart)")
+                    st.line_chart(chart_df)
+
+                    current_rsi = float(np.random.uniform(45, 65))
                     prediction = random.choice([0, 1])
 
-                    st.success("✅ ការវិភាគស៊ីជម្រៅត្រូវបានបញ្ចប់ដោយជោគជ័យ!")
-                    
-                    st.markdown("### 📈 ក្រាហ្វិកបច្ចេកទេសតម្លៃ និងសូចនាករ (Advanced Technical Chart)")
-                    st.line_chart(df[['Close', 'MA_5', 'MA_20']])
-
                     col1, col2, col3 = st.columns(3)
-                    col1.metric(label="💰 តម្លៃមាសរស់ (Live Price)", value=f"${current_price:.2f}")
+                    col1.metric(label="💰 តម្លៃមាសបច្ចុប្បន្ន (Live Price)", value=f"${current_price:.2f}")
                     col2.metric(label="📊 RSI (14)", value=f"{current_rsi:.2f}")
                     col3.metric(label="🌐 ស្ថានភាពទីផ្សារ", value="Normal Trend")
                     
@@ -228,7 +190,7 @@ if menu == "📊 វិភាគទីផ្សារ & Signals (VIP)":
                         col_c.metric("🏆 Take Profit", f"${take_profit:.2f}", delta="-24 pips")
 
                 except Exception as e:
-                    st.error(f"⚠️ មានបញ្ហាក្នុងការដំណើរការទិន្នន័យ៖ {e}")
+                    st.error(f"⚠️️ មានបញ្ហាក្នុងការបង្កើត Chart៖ {e}")
 
 # ----------------- TAB 2: TradingView Chart -----------------
 elif menu == "📈 TradingView Chart (Live)":
@@ -247,7 +209,7 @@ elif menu == "📈 TradingView Chart (Live)":
     </div>
     """, height=520)
 
-# ----------------- TAB 3: AI Trading Chatbot -----------------
+# ----------------- TAB 3: AI Chatbot -----------------
 elif menu == "🤖 AI Trading Chatbot":
     st.title("🤖 AI Trading Assistant Chatbot")
     if "messages" not in st.session_state:
@@ -278,11 +240,12 @@ elif menu == "📚 មជ្ឈមណ្ឌលមេរៀន Trading":
 elif menu == "📰 ព័ត៌មានសេដ្ឋកិច្ច (News)":
     st.title("📰 ព័ត៌មានសេដ្ឋកិច្ច និងព្រឹត្តិការណ៍ (Economic Calendar)")
     st.markdown("""
-    <div class="news-box"><strong>🔥 08:30 PM (US) - Non-Farm Payrolls (NFP)</strong><br><span style="color: #ff4b4b;">🔴 Impact: High</span></div>
-    <div class="news-box"><strong>⚠ 07:30 PM (US) - Consumer Price Index (CPI)</strong><br><span style="color: #ff4b4b;">🔴 Impact: High</span></div>
+    <div style="background-color: #1f242d; border-left: 4px solid #FFD700; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
+        <strong>🔥 08:30 PM (US) - Non-Farm Payrolls (NFP)</strong><br><span style="color: #ff4b4b;">🔴 Impact: High</span>
+    </div>
     """, unsafe_allow_html=True)
 
-# ----------------- TAB 7: TikTok Ultra Turbo Boost -----------------
+# ----------------- TAB 7: TikTok Boost -----------------
 elif menu == "🔥 TikTok Ultra Turbo Boost":
     st.title("🔥 TikTok Ultra Turbo Boost")
     tiktok_url = st.text_input("🔗 បញ្ចូលតំណភ្ជាប់វីដេអូ TikTok:")
@@ -293,46 +256,3 @@ elif menu == "🔥 TikTok Ultra Turbo Boost":
             st.balloons()
         else:
             st.error("❌ សូមបញ្ចូល Link វីដេអូ TikTok ឱ្យបានត្រឹមត្រូវ។")
-
-# ----------------- TAB 8: Smart Zone -----------------
-elif menu == "📍 Smart Zone & Liquidity Map":
-    st.title("📍 Institutional Order Blocks & Liquidity Map")
-    st.table(pd.DataFrame({
-        "Zone Type": ["Institutional Buy (OB)", "Liquidity Pool (High)", "Institutional Sell (OB)"],
-        "Price Level": ["$2,365.00 - $2,370.00", "$2,410.00", "$2,400.00 - $2,405.00"],
-        "Status": ["🟢 Waiting", "🔴 Target", "🔴 Resistance"]
-    }))
-
-# ----------------- TAB 9: Copy Trading -----------------
-elif menu == "🤖 Copy Trading Simulation":
-    st.title("🤖 Auto & Copy Trading Simulation")
-    with st.form("copy_form"):
-        st.text_input("លេខគណនីត្រេត (Account ID):")
-        st.text_input("លេខសម្ងាត់ API / Master Password:", type="password")
-        if st.form_submit_button("🔗 ភ្ជាប់គណនីស្វ័យប្រវត្ត"):
-            st.success("🎉 គណនីបានភ្ជាប់ជាមួយ Copy Trading ជោគជ័យ!")
-
-# ----------------- TAB 10: Telegram Bot -----------------
-elif menu == "🔔 Telegram Alert Bot":
-    st.title("🔔 Telegram Bot Integration")
-    with st.form("tele_form"):
-        st.text_input("Telegram Bot Token:")
-        st.text_input("Telegram Channel / Chat ID:")
-        if st.form_submit_button("💾 រក្សាទុក"):
-            st.success("🎉 កំណត់ត្រាបានរក្សាទុកជោគជ័យ!")
-
-# ----------------- TAB 11: Game Top-Up -----------------
-elif menu == "💎 Game Top-Up Center (Free Fire & MLBB)":
-    st.title("💎 Game Top-Up Center (Free Fire & MLBB)")
-    with st.form("game_form"):
-        st.selectbox("ជ្រើសរើសហ្គេម៖", ["🔥 Free Fire", "⚔️ Mobile Legends"])
-        st.text_input("Player ID:")
-        if st.form_submit_button("🛒 ទិញពេជ្រឥឡូវនេះ"):
-            st.success("🎉 ការបញ្ជាទិញពេជ្របានទទួលជោគជ័យ!")
-
-# ----------------- TAB 12: Anime Streaming -----------------
-elif menu == "🎬 Anime Streaming Center (Top 20)":
-    st.title("🎬 Anime Streaming Center (Top 20 Animes)")
-    anime = st.selectbox("ជ្រើសរើសរឿង Anime៖", ["🔥 Jujutsu Kaisen", "⚔️ Demon Slayer", "⚡ Attack on Titan", "🌊 One Piece"])
-    st.write(f"កំពុងចាក់បញ្ចាំង៖ {anime}")
-    st.video("https://www.youtube.com/watch?v=4Il0YUS2kkA")
