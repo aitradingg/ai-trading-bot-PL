@@ -18,7 +18,7 @@ st.markdown("""
     /* Top Header Badges */
     .header-bar {
         background-color: #161b22;
-        padding: 10px 15px;
+        padding: 12px 15px;
         border-radius: 10px;
         display: flex;
         justify-content: space-between;
@@ -27,14 +27,13 @@ st.markdown("""
         margin-bottom: 15px;
     }
     
-    /* Action Cards */
     .analysis-container {
         background-color: #12161f;
         border: 1px solid #262d3d;
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-        margin-top: 10px;
+        margin-top: 15px;
     }
     
     .status-badge-wait {
@@ -55,7 +54,6 @@ st.markdown("""
         margin-top: 15px;
     }
     
-    /* Styling Buttons */
     .stButton > button {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: #0b0e14;
@@ -82,28 +80,32 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ⏱️ Timeframe Selector (1m, 5m, 15m, 30m, 1h, 4h, 1d)
+st.markdown("<b>⏱️ ជ្រើសរើសកម្រិតពេលវេលា (Timeframe):</b>", unsafe_allow_html=True)
 tf_cols = st.columns(7)
 timeframes = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]
-selected_tf = "15m" # Default
+
+if "selected_tf" not in st.session_state:
+    st.session_state["selected_tf"] = "15m"
 
 for i, tf in enumerate(timeframes):
     with tf_cols[i]:
-        if st.button(tf, key=f"tf_{tf}"):
-            selected_tf = tf
+        if st.button(tf, key=f"tf_btn_{tf}"):
+            st.session_state["selected_tf"] = tf
 
+st.info(f"📌 Timeframe ដែលបានជ្រើសរើសបច្ចុប្បន្ន៖ **{st.session_state['selected_tf']}**")
 st.markdown("---")
 
 # 📊 ផ្នែកបង្ហាញ Chart និងផ្ទាំងវិភាគ (Analysis Dashboard)
 col_chart, col_panel = st.columns([2, 1.2])
 
 with col_chart:
-    st.markdown(f"#### 📈 XAUUSD Chart ({selected_tf})")
+    st.markdown(f"#### 📈 XAUUSD Technical Chart ({st.session_state['selected_tf']})")
     
-    # Tạo Sample Chart តាម Timeframe
+    # គណនាក្រាហ្វិកតាម Timeframe
     np.random.seed(42)
     dates = pd.date_range(end=datetime.date.today(), periods=40, freq='H')
-    base_vals = np.linspace(4120.0, 4126.0, 40)
-    noise = np.random.normal(0, 2.5, 40).cumsum()
+    base_vals = np.linspace(4120.0, 4125.60, 40)
+    noise = np.random.normal(0, 2.0, 40).cumsum()
     close_prices = base_vals + noise
     
     chart_df = pd.DataFrame({
@@ -114,48 +116,48 @@ with col_chart:
     st.line_chart(chart_df)
 
 with col_panel:
-    st.markdown("### 🔍 Terminal Control")
+    st.markdown("### 🔍 Terminal Control & Analysis")
     
-    # េបៀបបញ្ចូលតម្លៃ Live ផ្ទាល់ខ្លួន ឬទាញយកស្វ័យប្រវត្តិ
     current_price = st.number_input("💰 តម្លៃមាសបច្ចុប្បន្ន (Live Price):", value=4125.60, step=0.1)
+    current_rsi = st.slider("📊 កម្រិត RSI (14):", min_value=0.0, max_value=100.0, value=48.5)
     
-    # ផ្ទាំងម៉ឺនុយរងស្រដៀងក្នុងរូប (Analysis | Bot | History | News)
-    sub_tab = st.radio("ជ្រើសរើសផ្ទាំង:", ["Analysis", "Bot", "History"], horizontal=True)
+    st.markdown('<div class="analysis-container">', unsafe_allow_html=True)
+    st.write("📌 **Status:** `READY FOR ANALYSIS`")
     
-    if sub_tab == "Analysis":
-        st.markdown('<div class="analysis-container">', unsafe_allow_html=True)
-        st.write("📌 **Status:** `READY` (Pro Model)")
+    # 🎛️ ប៊ូតុង Analyze និង Best Setup នៅកន្លែងតែមួយយ៉ាងច្បាស់
+    col_b1, col_b2 = st.columns(2)
+    with col_b1:
+        analyze_btn = st.button("📊 Analyze")
+    with col_b2:
+        best_setup_btn = st.button("⚡ Best setup")
         
-        col_b1, col_b2 = st.columns(2)
-        with col_b1:
-            analyze_btn = st.button("📊 Analyze")
-        with col_b2:
-            best_setup_btn = st.button("⚡ Best setup")
-            
-        if analyze_btn or best_setup_btn:
+    if analyze_btn or best_setup_btn:
+        if current_rsi < 50:
             st.markdown("""
-                <div class="status-badge-wait">
-                    <b>⏳ WAIT TO SELL — 4,129.00</b><br>
-                    <small>Watch level — not a signal yet | Intraday · No expiry</small><br>
+                <div class="status-badge-buy">
+                    <b>🟢 SIGNAL: BUY (ទិញឡើង)</b><br>
+                    <small>Support / Bullish Order Block detected | Target: +15 pips</small><br>
                     <span style="color: #2ecc71; font-size: 12px;">● Completed</span>
                 </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
-                <div class="status-badge-buy">
-                    <b>🟢 READY TO SCAN</b><br>
-                    <small>សូមចុចปุ่ม Analyze ដើម្បីចាប់ផ្តើមស្កេនទីផ្សារ។</small>
+                <div class="status-badge-wait">
+                    <b>⏳ WAIT TO SELL — 4,129.00</b><br>
+                    <small>Watch level — resistance zone | Intraday · No expiry</small><br>
+                    <span style="color: #2ecc71; font-size: 12px;">● Completed</span>
                 </div>
             """, unsafe_allow_html=True)
-            
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-    elif sub_tab == "Bot":
-        st.info("🤖 AI Auto Trading Bot កំពុងដំណើរការស្វ័យប្រវត្តិ។")
     else:
-        st.info("📜 ប្រវត្តិនៃការ Trades កន្លងមកគឺស្អាតល្អ។")
+        st.markdown("""
+            <div style="background-color: #1a212d; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 13px;">
+                💡 សូមចុចប៊ូតុង <b>Analyze</b> ឬ <b>Best setup</b> ដើម្បីឱ្យ AI ស្កេនរកសញ្ញា Trades ជូន។
+            </div>
+        """, unsafe_allow_html=True)
+        
+    st.markdown('</div>', unsafe_allow_html=True)
 
-# 📱 Bottom Navigation Bar (Overview, Terminal, Generate, Signals, My Trades)
+# 📱 Bottom Navigation Bar
 st.markdown("---")
 nav_cols = st.columns(5)
 nav_cols[0].button("🏠 Overview")
