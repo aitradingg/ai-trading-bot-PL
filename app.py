@@ -1,167 +1,125 @@
-import datetime
-import pandas as pd
-import numpy as np
 import streamlit as st
+from PIL import Image
+import google.generativeai as genai
 
-# កំណត់ទម្រង់ទំព័រវេបសាយ (Mobile & PC Responsive)
+# 1. កំណត់ Configuration ទំព័រ Streamlit
 st.set_page_config(
-    page_title="XAUUSD Trading Terminal Pro",
-    page_icon="⚡",
+    page_title="XAUUSD AI Vision Analyzer",
+    page_icon="🧠",
     layout="wide"
 )
 
-# 🎨 Custom CSS រចនាបទខ្មៅបែប Trading Platform (Dark Mode Pro)
+# 2. រចនាបទ Custom CSS ស្អាត និងទាន់សម័យ (Dark Mode Terminal)
 st.markdown("""
     <style>
     .main { background-color: #0b0e14; color: #ffffff; }
-    
-    /* Top Header Badges */
-    .header-bar {
-        background-color: #161b22;
-        padding: 12px 15px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 1px solid #30363d;
-        margin-bottom: 15px;
-    }
-    
-    .analysis-container {
-        background-color: #12161f;
-        border: 1px solid #262d3d;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-        margin-top: 15px;
-    }
-    
-    .status-badge-wait {
-        background-color: rgba(231, 76, 60, 0.15);
-        border-left: 4px solid #e74c3c;
-        padding: 15px;
-        border-radius: 8px;
-        color: #ffffff;
-        margin-top: 15px;
-    }
-    
-    .status-badge-buy {
-        background-color: rgba(46, 204, 113, 0.15);
-        border-left: 4px solid #2ecc71;
-        padding: 15px;
-        border-radius: 8px;
-        color: #ffffff;
-        margin-top: 15px;
-    }
-    
     .stButton > button {
         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
         color: #0b0e14;
         font-weight: bold;
         border: none;
         border-radius: 8px;
-        padding: 0.6rem 1rem;
+        padding: 0.75rem 1.5rem;
         width: 100%;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        font-size: 16px;
+        box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        transition: all 0.3s ease;
     }
     .stButton > button:hover {
-        opacity: 0.9;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 14px rgba(255, 215, 0, 0.5);
+    }
+    .result-card {
+        background-color: #161b22;
+        border: 1px solid #30363d;
+        padding: 20px;
+        border-radius: 12px;
+        margin-top: 15px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 🚀 Top Header Section (XAUUSD Terminal Info)
-st.markdown("""
-    <div class="header-bar">
-        <div><b>🟡 XAUUSD</b> <span style="background-color: #2ecc71; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-weight: bold;">🟢 Open</span></div>
-        <div style="font-size: 18px; font-weight: bold; color: #FFD700;">$4,125.60</div>
-    </div>
-""", unsafe_allow_html=True)
+# 3. Sidebar កន្លែងបញ្ចូល Gemini API Key
+st.sidebar.title("⚙️ AI Vision Settings")
+api_key = st.sidebar.text_input("🔑 បញ្ចូល Gemini API Key របស់អ្នក:", type="password")
+st.sidebar.markdown("""
+---
+💡 **របៀបយក API Key ឥតគិតថ្លៃ:**
+1. ចូលទៅកាន់ [Google AI Studio](https://aistudio.google.com/)
+2. ចុចយក **Get API Key**
+3. ចម្លង API Key មក Paste ដាក់ក្នុងប្រអប់ខាងលើជាការស្រេច!
+""")
 
-# ⏱️ Timeframe Selector (1m, 5m, 15m, 30m, 1h, 4h, 1d)
-st.markdown("<b>⏱️ ជ្រើសរើសកម្រិតពេលវេលា (Timeframe):</b>", unsafe_allow_html=True)
-tf_cols = st.columns(7)
-timeframes = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]
+st.title("🧠 XAUUSD AI Vision Market Analyzer (Chart-to-Trade Engine)")
+st.markdown("ទម្លាក់/Upload រូបភាព **Trading Chart (XAUUSD)** របស់អ្នកចូលទីនេះ ដើម្បីឱ្យ AI ពិនិត្យមើល Price Action, ICT/SMC ព្រមទាំងទាញយក **Entry, TP, SL** ដោយស្វ័យប្រវត្តិ។")
 
-if "selected_tf" not in st.session_state:
-    st.session_state["selected_tf"] = "15m"
+st.divider()
 
-for i, tf in enumerate(timeframes):
-    with tf_cols[i]:
-        if st.button(tf, key=f"tf_btn_{tf}"):
-            st.session_state["selected_tf"] = tf
+# 4. កន្លែង Upload រូបភាព Chart
+col1, col2 = st.columns([1.2, 1])
 
-st.info(f"📌 Timeframe ដែលបានជ្រើសរើសបច្ចុប្បន្ន៖ **{st.session_state['selected_tf']}**")
-st.markdown("---")
-
-# 📊 ផ្នែកបង្ហាញ Chart និងផ្ទាំងវិភាគ (Analysis Dashboard)
-col_chart, col_panel = st.columns([2, 1.2])
-
-with col_chart:
-    st.markdown(f"#### 📈 XAUUSD Technical Chart ({st.session_state['selected_tf']})")
+with col1:
+    st.markdown("### 📤 ១. ទម្លាក់រូបភាព Chart (Screenshot)")
+    uploaded_file = st.file_uploader("ជ្រើសរើសរូបភាព Chart (PNG, JPG, JPEG):", type=["png", "jpg", "jpeg"])
     
-    # គណនាក្រាហ្វិកតាម Timeframe
-    np.random.seed(42)
-    dates = pd.date_range(end=datetime.date.today(), periods=40, freq='H')
-    base_vals = np.linspace(4120.0, 4125.60, 40)
-    noise = np.random.normal(0, 2.0, 40).cumsum()
-    close_prices = base_vals + noise
-    
-    chart_df = pd.DataFrame({
-        'Price': close_prices,
-        'EMA_9': pd.Series(close_prices).ewm(span=9).mean(),
-    }, index=dates)
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
+        st.image(image, caption="📸 រូបភាព Chart ដែលបាន Upload", use_container_width=True)
 
-    st.line_chart(chart_df)
+with col2:
+    st.markdown("### 🎛️ ២. ការកំណត់ការវិភាគ")
+    timeframe = st.selectbox("⏱️ Timeframe នៃ Chart ក្នុងរូបភាព:", ["M15 (Scalping)", "H1 (Day Trading)", "H4 (Swing Trading)", "D1 (Position)"])
+    trading_style = st.selectbox("🎯 យុទ្ធសាស្ត្រវិភាគ:", ["ICT / Smart Money Concepts (SMC)", "Price Action & Trendlines", "RSI / Indicator Divergence"])
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    analyze_btn = st.button("🚀 ចាប់ផ្តើមឱ្យ AI វិភាគរូបភាពឥឡូវនេះ")
 
-with col_panel:
-    st.markdown("### 🔍 Terminal Control & Analysis")
-    
-    current_price = st.number_input("💰 តម្លៃមាសបច្ចុប្បន្ន (Live Price):", value=4125.60, step=0.1)
-    current_rsi = st.slider("📊 កម្រិត RSI (14):", min_value=0.0, max_value=100.0, value=48.5)
-    
-    st.markdown('<div class="analysis-container">', unsafe_allow_html=True)
-    st.write("📌 **Status:** `READY FOR ANALYSIS`")
-    
-    # 🎛️ ប៊ូតុង Analyze និង Best Setup នៅកន្លែងតែមួយយ៉ាងច្បាស់
-    col_b1, col_b2 = st.columns(2)
-    with col_b1:
-        analyze_btn = st.button("📊 Analyze")
-    with col_b2:
-        best_setup_btn = st.button("⚡ Best setup")
-        
-    if analyze_btn or best_setup_btn:
-        if current_rsi < 50:
-            st.markdown("""
-                <div class="status-badge-buy">
-                    <b>🟢 SIGNAL: BUY (ទិញឡើង)</b><br>
-                    <small>Support / Bullish Order Block detected | Target: +15 pips</small><br>
-                    <span style="color: #2ecc71; font-size: 12px;">● Completed</span>
-                </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown("""
-                <div class="status-badge-wait">
-                    <b>⏳ WAIT TO SELL — 4,129.00</b><br>
-                    <small>Watch level — resistance zone | Intraday · No expiry</small><br>
-                    <span style="color: #2ecc71; font-size: 12px;">● Completed</span>
-                </div>
-            """, unsafe_allow_html=True)
+# 5. ដំណើរការវិភាគរូបភាពដោយប្រើ Gemini LLM Vision
+if analyze_btn:
+    if not api_key:
+        st.error("⚠️ សូមបញ្ចូល Gemini API Key នៅ Sidebar ខាងឆ្វេងជាមុនសិន!")
+    elif uploaded_file is None:
+        st.warning("⚠️ សូម Upload រូបភាព Chart ជាមុនសិន înainte ចុចវិភាគ!")
     else:
-        st.markdown("""
-            <div style="background-color: #1a212d; padding: 12px; border-radius: 8px; margin-top: 10px; font-size: 13px;">
-                💡 សូមចុចប៊ូតុង <b>Analyze</b> ឬ <b>Best setup</b> ដើម្បីឱ្យ AI ស្កេនរកសញ្ញា Trades ជូន។
-            </div>
-        """, unsafe_allow_html=True)
-        
-    st.markdown('</div>', unsafe_allow_html=True)
+        with st.spinner("🧠 AI កំពុងពិនិត្យមើលCandlestick, Order Block, FVG, និងកំណត់ Entry/TP/SL..."):
+            try:
+                # Configure AI Model
+                genai.configure(api_key=api_key)
+                model = genai.GenerativeAIModel('gemini-1.5-flash')
+                
+                # Prompt សំខាន់សម្រាប់បញ្ជាឱ្យ AI គិតដូច Professional Trader
+                system_prompt = f"""
+You are an expert institutional Forex & Gold (XAUUSD) Trader specializing in ICT (Smart Money Concepts), Price Action, and Market Structure Analysis.
 
-# 📱 Bottom Navigation Bar
-st.markdown("---")
-nav_cols = st.columns(5)
-nav_cols[0].button("🏠 Overview")
-nav_cols[1].button("📊 Terminal")
-nav_cols[2].button("⚡ Generate")
-nav_cols[3].button("🔔 Signals")
-nav_cols[4].button("👤 My Trades")
+Analyze the uploaded XAUUSD chart image in detail for Timeframe: {timeframe} using strategy: {trading_style}.
+
+Please analyze the chart and provide your response in clear, structured Khmer language (ភាសាខ្មែរ) with the following format:
+
+---
+### 📊 1. ការសម្គាល់រចនាសម្ព័ន្ធទីផ្សារ (Market Structure)
+- **Trend បច្ចុប្បន្ន:** (Bullish / Bearish / Sideways)
+- **តំបន់គន្លឹះ (Key Levels):** (Order Block, Fair Value Gap (FVG), Support/Resistance, Liquidity Pools)
+
+### 🎯 2. សញ្ញាណែនាំជួញដូរ (Trading Setup)
+- **Signal:** [BUY / SELL / WAIT (រង់ចាំ)]
+- **🎯 ចំណុចចូល (Entry Price):** $....
+- **🛑 ការពារហានិភ័យ (Stop Loss - SL):** $....
+- **🏆 គោលដៅប្រាក់ចំណេញ 1 (Take Profit 1 - TP1):** $....
+- **🏆 គោលដៅប្រាក់ចំណេញ 2 (Take Profit 2 - TP2):** $....
+
+### 🧠 3. ហេតុផលបច្ចេកទេសស៊ីជម្រៅ (Technical Analysis Reason)
+- រៀបរាប់ហេតុផលយ៉ាងលម្អិតថាហេតុអ្វីបានជាត្រូវ Buy ឬ Sell ផ្អែកលើរូបភាព Candle, Liquidity Sweep ឬ FVG ក្នុង Chart នេះ។
+---
+Provide precise price levels visible in the image. Be clear, direct, and practical.
+"""
+
+                # ផ្ញើ Prompt និងរូបភាពទៅកាន់ Gemini Vision
+                response = model.generate_content([system_prompt, image])
+                
+                st.success("✅ ការវិភាគរូបភាពត្រូវបានបញ្ចប់!")
+                st.markdown("---")
+                st.markdown("## 📋 លទ្ធផលការវិភាគពី AI Vision Engine")
+                st.markdown(f'<div class="result-card">{response.text}</div>', unsafe_allow_html=True)
+
+            except Exception as e:
+                st.error(f"❌ មានបញ្ហាក្នុងការដំណើរការ AI: {e}")
