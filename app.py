@@ -120,3 +120,6 @@ Provide precise price levels visible in the image. Be clear, direct, and practic
                 st.markdown("---")
                 st.markdown("## 📋 លទ្ធផលការវិភាគពី AI Vision Engine")
                 st.markdown(f'<div class="result-card">{response.text}</div>', unsafe_allow_html=True)
+
+            except Exception as e:
+                st.error(f"❌ មានបញ្ហាក្នុងការដំណើរការ AI: {e}")
