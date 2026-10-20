@@ -4,32 +4,41 @@ import google.generativeai as genai
 
 # កំណត់ទម្រង់ទំព័រវេបសាយ
 st.set_page_config(
-    page_title="XAUUSD AI Vision Analyzer",
+    page_title="XAUUSD AI Chart Analyzer",
     page_icon="📈",
     layout="centered"
 )
 
 st.title("📈 XAUUSD Chart Vision Analyzer")
-st.markdown("ទម្លាក់រូបភាព **Chart XAUUSD** របស់អ្នកចូលខាងក្រោម ដើម្បីឱ្យ AI វិភាគ និងបង្ហាញតម្លៃ Entry, TP, SL យ៉ាងត្រឹមត្រូវដោយស្វ័យប្រវត្តិ។")
+st.markdown("ទម្លាក់រូបភាព **Chart XAUUSD** របស់អ្នកចូលខាងក្រោម ដើម្បីឱ្យ AI វិភាគ និងបង្ហាញតម្លៃ Entry, TP, SL យ៉ាងត្រឹមត្រូវ។")
 
-# ដាក់ API Key របស់អ្នកផ្ទាល់នៅទីនេះ ដើម្បីមិនបាច់វាយបញ្ចូលម្ដងទៀតពេលប្រើ
-# (ជំនួសអត្ថបទ YOUR_GEMINI_API_KEY ដោយ API Key ពិតប្រាកដរបស់អ្នក)
-HARDCODED_API_KEY = "YOUR_GEMINI_API_KEY"
+# ទាញយក API Key ពី st.secrets ដោយសុវត្ថិភាពខ្ពស់
+api_key = None
+try:
+    if "GEMINI_API_KEY" in st.secrets:
+        api_key = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    pass
+
+# បើគ្មានក្នុង secrets ទេ ផ្តល់ប្រអប់បញ្ចូលសុវត្ថិភាពនៅ Sidebar
+if not api_key:
+    api_key = st.sidebar.text_input("🔑 Gemini API Key:", type="password")
 
 # កន្លែង Upload រូបភាព Chart
-uploaded_file = st.file_uploader("📤 ជ្រើសរើសរូបភាព Chart (PNG, JPG):", type=["png", "jpg", "jpeg"])
+uploaded_file = st.file_uploader("📤 ជ្រើសរើសរូបភាព Chart (PNG, JPG, JPEG):", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="📸 រូបភាព Chart ដែលបានជ្រើសរើស", use_container_width=True)
     
     if st.button("🔍 វិភាគទីផ្សារឥឡូវនេះ"):
-        if HARDCODED_API_KEY == "YOUR_GEMINI_API_KEY":
-            st.error("⚠️ សូមជំនួស 'YOUR_GEMINI_API_KEY' ក្នុងកូដដោយ API Key របស់អ្នកជាមុនសិន!")
+        if not api_key:
+            st.error("⚠️ សូមកំណត់ Gemini API Key ជាមុនសិន (អាចដាក់ក្នុង Streamlit Secrets ឬ Sidebar)!")
         else:
             with st.spinner("🧠 AI កំពុងវិភាគរចនាសម្ព័ន្ធទីផ្សារ និងគណនា TP/SL..."):
                 try:
-                    genai.configure(api_key=HARDCODED_API_KEY)
+                    genai.configure(api_key=api_key)
+                    # ប្រើប្រាស់โมเดល gemini-1.5-flash ដែលមានសមត្ថភាពខ្ពស់លើការមើលរូបភាព
                     model = genai.GenerativeModel('gemini-1.5-flash')
                     
                     prompt = """
